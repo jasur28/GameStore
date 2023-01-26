@@ -1,7 +1,12 @@
-﻿namespace GameStore.DAL.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace GameStore.DAL.Entities
 {
     public class BaseEntity
     {
-        public Guid Id { get;set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get;set; }
     }
 }

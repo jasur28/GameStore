@@ -6,13 +6,13 @@ namespace GameStore.DAL.Interfaces
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
 
-        Task<TEntity> GetByIdAsync(Guid id);
+        Task<TEntity> GetByIdAsync(int id);
 
         Task AddAsync(TEntity entity);
 
         void Delete(TEntity entity);
 
-        Task DeleteByIdAsync(Guid id);
+        Task DeleteByIdAsync(int id);
 
         void Update(TEntity entity);
     }

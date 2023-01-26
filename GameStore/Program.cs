@@ -1,7 +1,20 @@
+using GameStore.BLL;
+using GameStore.BLL.Interfaces;
+using GameStore.BLL.Services;
+using GameStore.DAL.Data;
+using GameStore.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<GameStoreDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Gamestore")));
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddAutoMapper(typeof(AutomapperProfile));
+
 
 var app = builder.Build();
 

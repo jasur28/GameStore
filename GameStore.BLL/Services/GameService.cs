@@ -1,5 +1,8 @@
-﻿using GameStore.BLL.Interfaces;
+﻿using AutoMapper;
+using GameStore.BLL.Interfaces;
 using GameStore.BLL.Models;
+using GameStore.DAL.Entities;
+using GameStore.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +13,32 @@ namespace GameStore.BLL.Services
 {
     public class GameService : ICrud<GameModel>, IGameService
     {
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
+
+        public GameService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
+        }
+
         public Task AddAsync(GameModel model)
         {
-            throw new NotImplementedException();
+            var item = mapper.Map<Game>(model);
+            unitOfWork.GameRepository.AddAsync(item);
+            return unitOfWork.SaveAsync();
         }
 
-        public Task DeleteAsync(Guid id)
+        public Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var item = unitOfWork.GameRepository.DeleteByIdAsync(id);
+            return unitOfWork.SaveAsync();
         }
 
-        public Task<IEnumerable<GameModel>> GetAllAsync()
+        public async Task<IEnumerable<GameModel>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var items = await unitOfWork.GameRepository.GetAllAsync();
+            return mapper.Map<IEnumerable<GameModel>>(items);
         }
 
         public Task<IEnumerable<GameModel>> GetByFilterAsync(FilterSearchModel filterSearch)
@@ -30,7 +46,7 @@ namespace GameStore.BLL.Services
             throw new NotImplementedException();
         }
 
-        public Task<GameModel> GetByIdAsync(Guid id)
+        public Task<GameModel> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }

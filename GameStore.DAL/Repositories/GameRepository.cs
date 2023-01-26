@@ -18,7 +18,7 @@ namespace GameStore.DAL.Repositories
                 .ThenInclude(s => s.GameSubGenres).ToListAsync();
         }
 
-        public async Task<Game> GetByIdWithDetailsAsync(Guid id)
+        public async Task<Game> GetByIdWithDetailsAsync(int id)
         {
             return await dbContext.Games
                 .Include(g => g.GameGenre)

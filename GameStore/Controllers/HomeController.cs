@@ -1,26 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using GameStore.BLL.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GameStore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IGameService gameService;
+        public HomeController(IGameService gameService)
         {
-            _logger = logger;
+            this.gameService = gameService;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return Ok(await gameService.GetAllAsync());
         }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
     }
 }

@@ -4,12 +4,12 @@
     {
         Task<IEnumerable<TModel>> GetAllAsync();
 
-        Task<TModel> GetByIdAsync(Guid id);
+        Task<TModel> GetByIdAsync(int id);
 
         Task AddAsync(TModel model);
 
         Task UpdateAsync(TModel model);
 
-        Task DeleteAsync(Guid id);
+        Task DeleteAsync(int id);
     }
 }

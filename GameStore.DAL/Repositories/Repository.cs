@@ -22,7 +22,7 @@ namespace GameStore.DAL.Repositories
             dbContext.Set<TEntity>().Remove(entity);
         }
 
-        public async Task DeleteByIdAsync(Guid id)
+        public async Task DeleteByIdAsync(int id)
         {
             var item = await GetByIdAsync(id);
             dbContext.Set<TEntity>().Remove(item);
@@ -33,7 +33,7 @@ namespace GameStore.DAL.Repositories
             return await dbContext.Set<TEntity>().ToListAsync();
         }
 
-        public async Task<TEntity> GetByIdAsync(Guid id)
+        public async Task<TEntity> GetByIdAsync(int id)
         {
             return await dbContext.Set<TEntity>().FindAsync(id);
         }
