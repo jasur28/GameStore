@@ -1,10 +1,6 @@
 ﻿using GameStore.DAL.Interfaces;
 using GameStore.DAL.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.DAL.Data
 {
@@ -12,18 +8,16 @@ namespace GameStore.DAL.Data
     {
         private readonly GameStoreDbContext _gameStoreDbContext;
         private IGameRepository _gameRepository;
-        private IGameGenreRepository _gameGenreRepository;
-        private IGameSubGenreRepository _gameSubGenreRepository;
+        private IGenreRepository _genreRepository;
+        
         public UnitOfWork(GameStoreDbContext gameStoreDbContext)
         {
             _gameStoreDbContext = gameStoreDbContext;
         }
         public IGameRepository GameRepository => _gameRepository
             = _gameRepository ?? new GameRepository(_gameStoreDbContext);
-        public IGameGenreRepository GameGenreRepository => _gameGenreRepository
-            = _gameGenreRepository ?? new GameGenreRepository(_gameStoreDbContext);
-        public IGameSubGenreRepository GameSubGenreRepository => _gameSubGenreRepository
-            = _gameSubGenreRepository ?? new GameSubGenreRepository(_gameStoreDbContext);
+        public IGenreRepository GenreRepository => _genreRepository
+            = _genreRepository ?? new GenreRepository(_gameStoreDbContext);
 
         public async Task SaveAsync()
         {

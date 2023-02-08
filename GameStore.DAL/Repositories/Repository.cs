@@ -12,30 +12,25 @@ namespace GameStore.DAL.Repositories
         {
             dbContext = gameStoreDbContext;
         }
-        public async Task AddAsync(TEntity entity)
+        public void Add(TEntity entity)
         {
-            await dbContext.Set<TEntity>().AddAsync(entity);
+            dbContext.Set<TEntity>().Add(entity);
         }
 
-        public void Delete(TEntity entity)
+        public void DeleteById(Guid id)
         {
-            dbContext.Set<TEntity>().Remove(entity);
-        }
-
-        public async Task DeleteByIdAsync(int id)
-        {
-            var item = await GetByIdAsync(id);
+            var item = GetById(id);
             dbContext.Set<TEntity>().Remove(item);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public IEnumerable<TEntity> GetAll()
         {
-            return await dbContext.Set<TEntity>().ToListAsync();
+            return dbContext.Set<TEntity>().ToList();
         }
 
-        public async Task<TEntity> GetByIdAsync(int id)
+        public TEntity GetById(Guid id)
         {
-            return await dbContext.Set<TEntity>().FindAsync(id);
+            return dbContext.Set<TEntity>().Find(id);
         }
 
         public void Update(TEntity entity)

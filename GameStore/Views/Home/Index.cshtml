@@ -1,7 +1,35 @@
 ﻿@model IEnumerable<GameStore.BLL.Models.GameModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Hello Jasur";
 }
 
-
+<div class="container">
+	<select></select>
+<a asp-controller="Game" asp-action="Create"><input type="button" class="btn btn-primary" value="Add Game" /></a>
+</div>
+<!-- Page section -->
+	<section class="page-section review-page spad">
+		<div class="container">
+			<div class="row">
+					@foreach(var p in Model)
+					{
+					<div class="col-sm-3">
+					<div class="review-item">
+						<a asp-controller="Game" asp-action="Details" asp-route-id="@p.Id">
+						@{
+							var base64 = Convert.ToBase64String(p.Photo);
+							var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+						}
+						<div class="review-cover set-bg" data-setbg="@imgSrc">
+						</div>
+						<p>@p.Name</p>
+						<p>@p.Description</p>
+						<p>@p.Price</p>
+						</a>
+					</div>
+					</div>
+					}
+			</div>
+		</div>
+	</section>

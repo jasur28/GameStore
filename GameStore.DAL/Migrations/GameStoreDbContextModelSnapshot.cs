@@ -24,24 +24,27 @@ namespace GameStore.DAL.Migrations
 
             modelBuilder.Entity("GameStore.DAL.Entities.Game", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
+                    b.Property<byte[]>("Photo")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("PhotoFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -51,78 +54,78 @@ namespace GameStore.DAL.Migrations
 
             modelBuilder.Entity("GameStore.DAL.Entities.GameGenre", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<Guid>("GenreId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("GameId")
-                        .HasColumnType("int");
+                    b.HasKey("GameId", "GenreId");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("GenreId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
-
-                    b.ToTable("GameGenres");
+                    b.ToTable("GameGenre");
                 });
 
-            modelBuilder.Entity("GameStore.DAL.Entities.GameSubGenre", b =>
+            modelBuilder.Entity("GameStore.DAL.Entities.Genre", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("GameGenreId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("GenreId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("ParenId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("GameGenreId");
+                    b.HasIndex("GenreId");
 
-                    b.ToTable("GameSubGenres");
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.GameGenre", b =>
                 {
                     b.HasOne("GameStore.DAL.Entities.Game", "Game")
-                        .WithMany("GameGenre")
+                        .WithMany("GameGenres")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Game");
-                });
-
-            modelBuilder.Entity("GameStore.DAL.Entities.GameSubGenre", b =>
-                {
-                    b.HasOne("GameStore.DAL.Entities.GameGenre", "GameGenre")
-                        .WithMany("GameSubGenres")
-                        .HasForeignKey("GameGenreId")
+                    b.HasOne("GameStore.DAL.Entities.Genre", "Genre")
+                        .WithMany("GameGenres")
+                        .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("GameGenre");
+                    b.Navigation("Game");
+
+                    b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.Genre", b =>
+                {
+                    b.HasOne("GameStore.DAL.Entities.Genre", null)
+                        .WithMany("SubGenres")
+                        .HasForeignKey("GenreId");
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Game", b =>
                 {
-                    b.Navigation("GameGenre");
+                    b.Navigation("GameGenres");
                 });
 
-            modelBuilder.Entity("GameStore.DAL.Entities.GameGenre", b =>
+            modelBuilder.Entity("GameStore.DAL.Entities.Genre", b =>
                 {
-                    b.Navigation("GameSubGenres");
+                    b.Navigation("GameGenres");
+
+                    b.Navigation("SubGenres");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,8 +2,8 @@
 
 namespace GameStore.DAL.Interfaces
 {
-    public interface IGameGenreRepository : IRepository<GameGenre>
+    public interface IGenreRepository : IRepository<Genre>
     {
-
+        
     }
 }

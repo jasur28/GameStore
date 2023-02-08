@@ -1,12 +1,15 @@
-﻿namespace GameStore.BLL.Models
+﻿using GameStore.DAL.Entities;
+
+namespace GameStore.BLL.Models
 {
     public class GameModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public byte[]? Image { get; set; }
-        public ICollection<int> GameGenreIds { get; set; }
+        public string PhotoFileName { get; set; }
+        public byte[] Photo { get; set; }
+        public IEnumerable<GameGenre> GameGenres { get; set; }
     }
 }

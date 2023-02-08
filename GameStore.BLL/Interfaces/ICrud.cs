@@ -2,14 +2,14 @@
 {
     public interface ICrud<TModel> where TModel : class
     {
-        Task<IEnumerable<TModel>> GetAllAsync();
+        IEnumerable<TModel> GetAll();
 
-        Task<TModel> GetByIdAsync(int id);
+        TModel GetById(Guid id);
 
-        Task AddAsync(TModel model);
+        void Add(TModel model);
 
-        Task UpdateAsync(TModel model);
+        void Update(TModel model);
 
-        Task DeleteAsync(int id);
+        void Delete(Guid id);
     }
 }
