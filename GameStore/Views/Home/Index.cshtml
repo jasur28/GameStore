@@ -4,6 +4,21 @@
     ViewData["Title"] = "Hello Jasur";
 }
 
+@*
+@if(User.Identity.IsAuthenticated)
+{
+    <p>@User.Identity.Name</p>
+ 
+    <form method="post" asp-controller="Account" asp-action="Logout">
+        <input type="submit" value="Logout" />
+    </form>
+}
+else
+{
+    <a asp-controller="Account" asp-action="Login">Login</a>
+	<a asp-controller="Account" asp-action="Register">Register</a>
+}
+*@
 <div class="container">
 	<select></select>
 <a asp-controller="Game" asp-action="Create"><input type="button" class="btn btn-primary" value="Add Game" /></a>

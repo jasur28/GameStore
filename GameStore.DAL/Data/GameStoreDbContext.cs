@@ -1,4 +1,5 @@
 ﻿using GameStore.DAL.Entities;
+using GameStore.DAL.Helpers;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace GameStore.DAL.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.Entity<GameGenre>().HasKey(gg => new { gg.GameId, gg.GenreId });
             modelBuilder.Entity<GameGenre>()
                 .HasOne(gg => gg.Game)
@@ -23,6 +25,10 @@ namespace GameStore.DAL.Data
             modelBuilder.Entity<GameGenre>()
                 .HasOne(gg => gg.Genre)
                 .WithMany(gg => gg.GameGenres).HasForeignKey(k => k.GenreId);
+
+            base.OnModelCreating(modelBuilder);
+
+
         }
     }
 }
