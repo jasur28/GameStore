@@ -1,4 +1,6 @@
 ﻿using GameStore.BLL.Models;
+using GameStore.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.BLL.Interfaces
 {

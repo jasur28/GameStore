@@ -9,7 +9,6 @@ namespace GameStore.DAL.Interfaces
 {
     public interface IGameRepository : IRepository<Game>
     {
-        Task<IEnumerable<Game>> GetAllWithDetailsAsync();
-        Task<Game> GetByIdWithDetailsAsync(int id);
+        public Game GetByIdWithDetails(Guid id);
     }
 }

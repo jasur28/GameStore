@@ -1,10 +1,16 @@
-﻿namespace GameStore.DAL.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GameStore.DAL.Entities
 {
-    public class GameGenre : BaseEntity
-    {
-        public string Name { get; set; }
-        public int GameId { get; set; }
-        public Game Game { get; set; }
-        public ICollection<GameSubGenre> GameSubGenres { get; set; }
+	public class GameGenre
+	{
+		public Guid GameId { get; set; }
+        public Guid GenreId { get; set; }
+		public Game Game { get; set; }
+        public Genre Genre { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,8 +12,9 @@ namespace GameStore.DAL.Entities
         [Required]
         public string Description { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal Price { get; set; }
-        public byte[]? Image { get; set; }
-        public ICollection<GameGenre> GameGenre { get; set; }
+        public decimal? Price { get; set; }
+        public string PhotoFileName { get; set; }
+        public byte[] Photo { get; set; }
+        public IEnumerable<GameGenre> GameGenres { get; set; }
     }
 }

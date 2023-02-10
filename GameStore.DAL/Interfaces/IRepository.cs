@@ -4,15 +4,13 @@ namespace GameStore.DAL.Interfaces
 {
     public interface IRepository<TEntity> where TEntity : BaseEntity
     {
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        IEnumerable<TEntity> GetAll();
 
-        Task<TEntity> GetByIdAsync(int id);
+        TEntity GetById(Guid id);
 
-        Task AddAsync(TEntity entity);
+        void Add(TEntity entity);
 
-        void Delete(TEntity entity);
-
-        Task DeleteByIdAsync(int id);
+        void DeleteById(Guid id);
 
         void Update(TEntity entity);
     }

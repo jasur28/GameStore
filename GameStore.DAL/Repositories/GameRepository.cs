@@ -11,19 +11,9 @@ namespace GameStore.DAL.Repositories
         {
         }
 
-        public async Task<IEnumerable<Game>> GetAllWithDetailsAsync()
+        public Game GetByIdWithDetails(Guid id)
         {
-            return await dbContext.Games
-                .Include(g => g.GameGenre)
-                .ThenInclude(s => s.GameSubGenres).ToListAsync();
-        }
-
-        public async Task<Game> GetByIdWithDetailsAsync(int id)
-        {
-            return await dbContext.Games
-                .Include(g => g.GameGenre)
-                .ThenInclude(s => s.GameSubGenres)
-                .SingleOrDefaultAsync(c => c.Id == id);
+            return dbContext.Set<Game>().Include(r => r.GameGenres).FirstOrDefault(r => r.Id == id);
         }
     }
 }
