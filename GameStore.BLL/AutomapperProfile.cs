@@ -14,6 +14,8 @@ namespace GameStore.BLL
                 .ReverseMap();
             CreateMap<Genre, GenreModel>()
                 .ReverseMap();
+            CreateMap<GameGenre, GameGenreModel>()
+                .ReverseMap();
         }
     }
 }

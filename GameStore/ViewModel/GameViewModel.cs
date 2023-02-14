@@ -10,17 +10,17 @@ namespace GameStore.ViewModel
     public class GameViewModel : GameModel
     {
         internal IList<SelectListItem> genreList;
-        public IGenreService genreService;
+        private IGenreService genreService;
         public GameViewModel(IGenreService genreService)
         {
             this.genreService = genreService;
-            var gameGenres = genreService.GetAll();
+            var gameGenres = this.genreService.GetAll();
 
             genreList = new List<SelectListItem>();
             foreach (var genre in gameGenres)
             {
-                genreList.Add(new SelectListItem(genre.Name, genre.Name,
-                    this.GameGenres.Any(r=>r.GenreId == genre.Id)));
+                genreList.Add(new SelectListItem(genre.Name, genre.Id.ToString()));
+                    //,this.GameGenres.Any(r=>r.GenreId == genre.Id)));
             }
         }
     }

@@ -654,9 +654,21 @@ ol {
 /*----------------------
   Review Section
 ------------------------*/
+div {
+    height: 50;
+    width: 50px;
+    border: 1px solid gray
+}
 
+.one {
+    float: left;
+}
+
+.two {
+    float: right;
+}
 .review-section {
-    background-position: right top;
+    /*background-position: right top;*/
 }
 
 .review-item .review-cover {
@@ -667,14 +679,14 @@ ol {
 
     .review-item .review-cover .score {
         position: absolute;
-        width: 54px;
+        width: 80px;
         height: 54px;
         top: -27px;
         left: 26px;
         padding-top: 15px;
         font-size: 18px;
         font-weight: 500;
-        color: #fff;
+        color: white;
         text-align: center;
         border-radius: 50%;
         z-index: 1;

@@ -68,15 +68,17 @@ namespace GameStore.Controllers
                     ModelState.AddModelError("", "Login or Password Incorrect");
                     return View(loginModel);
                 }
+                return RedirectToAction("Index", "Home");
             }
-            
+
+            return View(loginModel);
             //if (ReturnUrl != null) return LocalRedirect(ReturnUrl);
-            return RedirectToAction("Index", "Home");
+            
         }
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(LogIn));
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -3,6 +3,7 @@ using GameStore.BLL.Models;
 using GameStore.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace GameStore.Controllers
 {
@@ -18,6 +19,8 @@ namespace GameStore.Controllers
         //Get: Game/Create
         public IActionResult Create()
         {
+            GameViewModel genres = new GameViewModel(genreService);
+            ViewBag.Genres = genres.genreList;
             return View();
         }
 
@@ -26,9 +29,31 @@ namespace GameStore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(GameModel item)
         {
-            
+            //Create Guid
             item.Id = Guid.NewGuid();
 
+            //Select Genres
+            GameViewModel genres = new GameViewModel(genreService);
+            ViewBag.Genres = genres.genreList;
+            string[] gameGenres = Request.Form["lstGenres"].ToString().Split(",");
+            List<GameGenreModel> gameGenreModel = new List<GameGenreModel>();
+            foreach (string id in gameGenres)
+            {
+                gameGenreModel.Add(new GameGenreModel
+                {
+                    GameId = item.Id,
+                    GenreId = new Guid(id)
+                });
+
+                //if (!string.IsNullOrEmpty(id))
+                //{
+                //    string name = ((List<SelectListItem>)ViewBag.Genres)
+                //        .Where(x => x.Value == id).FirstOrDefault().Text;
+                //}
+            }
+            item.GameGenres = gameGenreModel;
+
+            //Upload Image
             var contextForm = Request.Form.Files;
             if (contextForm != null && contextForm.Count > 0)
             {
@@ -63,6 +88,7 @@ namespace GameStore.Controllers
         public IActionResult Details(Guid id)
         {
             var item = gameService.GetById(id);
+            
             return View(item);
         }
 

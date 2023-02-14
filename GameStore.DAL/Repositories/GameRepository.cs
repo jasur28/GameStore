@@ -13,7 +13,12 @@ namespace GameStore.DAL.Repositories
 
         public Game GetByIdWithDetails(Guid id)
         {
-            return dbContext.Set<Game>().Include(r => r.GameGenres).FirstOrDefault(r => r.Id == id);
+            return dbContext.Set<Game>().Include(r => r.GameGenres).ThenInclude(r=>r.Genre).FirstOrDefault(r => r.Id == id);
+        }
+
+        public IEnumerable<Game> GetAllWithDetails()
+        {
+            return dbContext.Set<Game>().Include(r => r.GameGenres).ThenInclude(r => r.Genre).ThenInclude(g=>g.SubGenres).ToList();
         }
     }
 }

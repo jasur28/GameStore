@@ -3,26 +3,41 @@
     ViewData["Title"] = "Details";
 	
 }
-
-<h1>Details</h1>
-
-<div>
-	@{
-		var base64 = Convert.ToBase64String(Model.Photo);
-		var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-	}
-	<img src="@imgSrc" width="264" height="345" />
-	<p>@Model.Name</p>
-	<p>@Model.Description</p>
-	<p>@Model.GameGenres</p>
-	<p>@Model.Price</p>
+<div></div>
+<section class="review-section spad set-bg" data-setbg="https://themewagon.github.io/game-warrior/img/pattern.png">
+<div class="container">
+<div class="row justify-content-center">
+		<div class="col-lg-3 col-md-6">
+	<div class="review-item">
+		@{
+			var base64 = Convert.ToBase64String(Model.Photo);
+			var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+		 }
+	
+		<div class="review-cover set-bg" data-setbg="@imgSrc">
+					<div class="score purple">@Model.Price $</div>
+		</div>
+		<p>
+				@foreach (var assignedTeam in Model.GameGenres)
+				{
+					@assignedTeam.Genre.Name
+				}
+		</p>
+		<div class="review-text">
+				<h5>@Model.Name</h5>
+				<p>@Model.Description</p>
+		</div>
+				<div>
+					<a asp-controller="Game" asp-action="Edit" asp-route-id="@Model.Id"><input type="button" class="btn btn-warning" value="Edit Game" /></a>
+					<a asp-controller="Game" asp-action="Delete" asp-route-id="@Model.Id"><input type="button" class="btn btn-danger" value="Delete Game" /></a>
+				</div>
+	</div>
+	</div>
+		
+</div>
 </div>
 
 <div>
-	<a asp-controller="Game" asp-action="Edit" asp-route-id="@Model.Id"><input type="button" class="btn btn-primary" value="Edit Game" /></a>
-	<a asp-controller="Game" asp-action="Delete" asp-route-id="@Model.Id"><input type="button" class="btn btn-primary" value="Delete Game" /></a>
+	<a asp-controller="Home" asp-action="Index"><input type="button" class="btn btn-success" value="Back" /></a>
 </div>
-
-<div>
-    <a asp-controller="Home" asp-action="Index">Back to List</a>
-</div>
+</section>
