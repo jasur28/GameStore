@@ -10,6 +10,6 @@ namespace GameStore.BLL.Models
         public decimal Price { get; set; }
         public string PhotoFileName { get; set; }
         public byte[] Photo { get; set; }
-        public IEnumerable<GameGenre> GameGenres { get; set; }
+        public IEnumerable<GameGenreModel> GameGenres { get; set; }
     }
 }

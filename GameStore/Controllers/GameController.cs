@@ -3,6 +3,7 @@ using GameStore.BLL.Models;
 using GameStore.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace GameStore.Controllers
 {
@@ -18,6 +19,8 @@ namespace GameStore.Controllers
         //Get: Game/Create
         public IActionResult Create()
         {
+            GameViewModel genres = new GameViewModel(genreService);
+            ViewBag.Genres = genres.genreList;
             return View();
         }
 
@@ -26,9 +29,25 @@ namespace GameStore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(GameModel item)
         {
-            
+            //Create Guid
             item.Id = Guid.NewGuid();
 
+            //Select Genres
+            GameViewModel genres = new GameViewModel(genreService);
+            ViewBag.Genres = genres.genreList;
+            string[] gameGenres = Request.Form["listGenres"].ToString().Split(",");
+            List<GameGenreModel> gameGenreModel = new List<GameGenreModel>();
+            foreach (string id in gameGenres)
+            {
+                gameGenreModel.Add(new GameGenreModel
+                {
+                    GameId = item.Id,
+                    GenreId = new Guid(id)
+                });
+            }
+            item.GameGenres = gameGenreModel;
+
+            //Upload Image
             var contextForm = Request.Form.Files;
             if (contextForm != null && contextForm.Count > 0)
             {
@@ -63,19 +82,30 @@ namespace GameStore.Controllers
         public IActionResult Details(Guid id)
         {
             var item = gameService.GetById(id);
+            
             return View(item);
         }
 
         // GET /Game/Edit/Id
         public IActionResult Edit(Guid id)
         {
+            GameViewModel genres = new GameViewModel(genreService);
+            ViewBag.Genres = genres.genreList;
+
             var item = gameService.GetById(id);
-            if (item == null)
+            genres.Id = item.Id;
+            genres.Name = item.Name;
+            genres.Description = item.Description;
+            genres.Price = item.Price;
+            genres.GameGenres = item.GameGenres;
+            genres.Photo = item.Photo;
+            genres.PhotoFileName = item.PhotoFileName;
+            if (genres == null)
             {
                 return NotFound();
             }
 
-            return View(item);
+            return View(genres);
         }
 
         // POST: Game/Edit/
@@ -83,6 +113,7 @@ namespace GameStore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(GameModel item)
         {
+            
             var contextForm = Request.Form.Files;
             if (contextForm != null && contextForm.Count > 0)
             {
@@ -99,6 +130,21 @@ namespace GameStore.Controllers
                 }
             }
 
+            //Select Genres
+            GameViewModel genres = new GameViewModel(genreService);
+            ViewBag.Genres = genres.genreList;
+            string[] gameGenres = Request.Form["listGenres"].ToString().Split(",");
+            List<GameGenreModel> gameGenreModel = new List<GameGenreModel>();
+            foreach (string id in gameGenres)
+            {
+                gameGenreModel.Add(new GameGenreModel
+                {
+                    GameId = item.Id,
+                    GenreId = new Guid(id)
+                });
+            }
+            item.GameGenres = gameGenreModel;
+            
             ModelState.ClearValidationState(nameof(GameModel));
             if (!TryValidateModel(item, nameof(GameModel)))
             {
@@ -106,6 +152,8 @@ namespace GameStore.Controllers
                 TempData["Success"] = "The game has been updated!";
                 return RedirectToAction("Index", "Home");
             }
+
+            
             return View(item);
         }
 

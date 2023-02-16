@@ -2,6 +2,8 @@
 using GameStore.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace GameStore.Controllers
 {
@@ -51,32 +53,81 @@ namespace GameStore.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> LogIn(LoginViewModel loginModel)//, string ReturnUrl)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogIn(LoginViewModel loginModel)
         {
-            if (!ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                return View(loginModel);
-            }
-
-            var user = await _userManager.FindByEmailAsync(loginModel.Email);
-            if (user != null)
-            {
-                var result = await
-                _signInManager.PasswordSignInAsync(user, loginModel.Password, false , true);
-                if (!result.Succeeded)
+                var user = await _userManager.FindByEmailAsync(loginModel.Email);
+                if (user != null)
                 {
-                    ModelState.AddModelError("", "Login or Password Incorrect");
-                    return View(loginModel);
+                    var result = await _signInManager.PasswordSignInAsync(user, loginModel.Password, false, true);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
             }
-            
-            //if (ReturnUrl != null) return LocalRedirect(ReturnUrl);
-            return RedirectToAction("Index", "Home");
+            ModelState.AddModelError("", "Login or Password Incorrect");
+            return View(loginModel);
         }
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(LogIn));
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Profile()
+        {
+            var userId =  _userManager.GetUserId(HttpContext.User);
+            ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
+            ProfileViewModel profileViewModel = new ProfileViewModel()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.UserName,
+                ProfilePicture = user.ProfilePicture,
+                Email = user.Email
+            };
+            return View(profileViewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile(ProfileViewModel profileViewModel)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
+            //Upload Image
+            var contextForm = Request.Form.Files;
+            if (contextForm != null && contextForm.Count > 0)
+            {
+                var formFile = contextForm[0];
+
+                if (formFile.Length > 0)
+                {
+                    using (var inputStream = new MemoryStream())
+                    {
+                        formFile.CopyTo(inputStream);
+                        profileViewModel.PhotoFileName = formFile.FileName;
+                        profileViewModel.ProfilePicture = inputStream.ToArray();
+                    }
+                }
+            }
+
+            user.FirstName = profileViewModel.FirstName;
+                user.LastName = profileViewModel.LastName;
+                user.UserName = profileViewModel.Username;
+                user.PhotoFileName = profileViewModel.PhotoFileName;
+                user.ProfilePicture = profileViewModel.ProfilePicture;
+                user.Email = profileViewModel.Email;
+            IdentityResult result = await _userManager.UpdateAsync(user);
+            if(result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(profileViewModel);
+            
         }
     }
 }

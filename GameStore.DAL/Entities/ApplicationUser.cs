@@ -6,5 +6,7 @@ namespace GameStore.DAL.Entities
 	{
 		public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string PhotoFileName { get; set; }
+        public byte[]? ProfilePicture { get; set; }
     }
 }

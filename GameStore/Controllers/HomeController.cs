@@ -14,9 +14,17 @@ namespace GameStore.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string searchString)//, list
         {
-            return View(gameService.GetAll());
+            if(string.IsNullOrEmpty(searchString))
+            {
+                return View(gameService.GetAll());
+            }
+            else
+            {
+                return View(gameService.GetByFilterAsync(searchString));
+            }
+            
         }
 
         public IActionResult About()
@@ -25,6 +33,3 @@ namespace GameStore.Controllers
         }
     }
 }
-//upload image
-//download image
-//generic template for view include AJAX fucntion
