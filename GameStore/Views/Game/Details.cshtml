@@ -17,12 +17,15 @@
 		<div class="review-cover set-bg" data-setbg="@imgSrc">
 					<div class="score purple">@Model.Price $</div>
 		</div>
-		<p>
+		
+
 				@foreach (var assignedTeam in Model.GameGenres)
 				{
-					@assignedTeam.Genre.Name
+						<div class="row">
+							<h4>@assignedTeam.Genre.Name</h4>
+						</div>
 				}
-		</p>
+		
 		<div class="review-text">
 				<h5>@Model.Name</h5>
 				<p>@Model.Description</p>

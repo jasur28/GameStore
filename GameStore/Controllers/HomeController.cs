@@ -14,7 +14,7 @@ namespace GameStore.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string searchString)
+        public IActionResult Index(string searchString)//, list
         {
             if(string.IsNullOrEmpty(searchString))
             {

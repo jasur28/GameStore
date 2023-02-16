@@ -654,19 +654,6 @@ ol {
 /*----------------------
   Review Section
 ------------------------*/
-div {
-    height: 50;
-    width: 50px;
-    border: 1px solid gray
-}
-
-.one {
-    float: left;
-}
-
-.two {
-    float: right;
-}
 .review-section {
     /*background-position: right top;*/
 }

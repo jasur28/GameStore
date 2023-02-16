@@ -3,14 +3,9 @@
 
 <section class="review-section spad set-bg" data-setbg="https://themewagon.github.io/game-warrior/img/pattern.png">
 	
-		<div class="form-group">
-			<label asp-for="GameGenres" class="control-label"></label>
-			<select id="lstFruits" name="lstFruits" asp-for="GameGenres" asp-items="ViewBag.Genres" multiple class="form-control">
-			</select>
-			<span asp-validation-for="GameGenres" class="text-danger"></span>
-		</div>
+		
 	
-		<div >
+<div class="container">
 <a asp-controller="Game" asp-action="Create"><input type="button" class="btn btn-success" value="Add Game" /></a>
 		<form asp-controller="Home" asp-action="Index" method="get">
     <p>
