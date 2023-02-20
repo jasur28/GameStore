@@ -11,5 +11,7 @@ namespace GameStore.DAL.Interfaces
     {
         public Game GetByIdWithDetails(Guid id);
         public IEnumerable<Game> GetAllWithDetails();
+
+        public IEnumerable<Game> Get(string filterSearch, List<Guid> filteredGenres);
     }
 }

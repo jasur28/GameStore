@@ -20,5 +20,10 @@ namespace GameStore.DAL.Repositories
         {
             return dbContext.Set<Game>().Include(r => r.GameGenres).ThenInclude(r => r.Genre).ThenInclude(g=>g.SubGenres).ToList();
         }
+
+        public IEnumerable<Game> Get(string filterSearch, List<Guid> filteredGenres)
+        {
+            return dbContext.Set<Game>().Include(r => r.GameGenres).Where(w => w.Name.Contains(filterSearch) && w.GameGenres.Any(a => filteredGenres.Any(ga => ga == a.GameGenreId))).ToList();
+        }
     }
 }

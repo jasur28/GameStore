@@ -6,6 +6,6 @@ namespace GameStore.BLL.Interfaces
 {
     public interface IGameService : ICrud<GameModel>
     {
-        IEnumerable<GameModel> GetByFilterAsync(string filterSearch);
+        IEnumerable<GameModel> GetByFilterAsync(string filterSearch, List<Guid> filteredGenres);
     }
 }

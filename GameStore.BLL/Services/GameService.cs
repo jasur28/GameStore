@@ -43,12 +43,9 @@ namespace GameStore.BLL.Services
             return mapper.Map<IEnumerable<GameModel>>(items);
         }
 
-        public IEnumerable<GameModel> GetByFilterAsync(string filterSearch)
+        public IEnumerable<GameModel> GetByFilterAsync(string filterSearch, List<Guid> filteredGenres)
         {
-            var items = unitOfWork.GameRepository.GetAllWithDetails();
-
-            var result = from search in items where search.Name.StartsWith(filterSearch)
-                         select search;
+            var items = unitOfWork.GameRepository.Where().Get(filterSearch, filteredGenres);
 
             return mapper.Map<IEnumerable<GameModel>>(result);
 
