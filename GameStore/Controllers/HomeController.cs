@@ -30,7 +30,7 @@ namespace GameStore.Controllers
             }
 
             model.FilterGenres = genreList;
-            model.Games = (List<BLL.Models.GameModel>)gameService.GetAll();//?
+            model.Games = gameService.GetAll().ToList();//?
 
             return View("Index", model);
         }
@@ -39,8 +39,13 @@ namespace GameStore.Controllers
         public IActionResult Index(IndexViewModel postModel)
         {
             var searchString = postModel.FilterString;
-            var selectedGenres = postModel.FilterGenres.Where(s => s.Selected).Select(s => s.Value).ToList();
-            var filteredGames = gameService.GetByFilterAsync(searchString, selectedGenres);
+            var selectedGenres = postModel.FilterGenres.Where(s => s.Selected).Select(s =>
+            {
+                Guid result;
+                Guid.TryParse(s.Value, out result);
+                return result;
+            }).ToList();
+            var filteredGames = gameService.GetByFilterAsync(searchString, selectedGenres).ToList();
 
             postModel.Games = filteredGames;
 

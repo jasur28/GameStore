@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IndexViewModel>
+﻿@model GameStore.ViewModel.IndexViewModel
 
 
 <section class="review-section spad set-bg" data-setbg="https://themewagon.github.io/game-warrior/img/pattern.png">
@@ -11,10 +11,10 @@
             <p>
                 <input type="text" name="FilterString" />
                 <div class="form-group">
-                    <label asp-for="GameGenres" class="control-label"></label>
-                    <select id="listGenres" name="listGenres" asp-for="GameGenres" asp-items="ViewBag.Genres" multiple class="form-control">
+					
+                    <select asp-for="FilterGenres" asp-items="Model.FilterGenres" class="form-control">
+						<option selected>---Select Genre---</option>
                     </select>
-                    <span asp-validation-for="GameGenres" class="text-danger"></span>
                 </div>
                 <input type="submit" value="Search" />
             </p>
