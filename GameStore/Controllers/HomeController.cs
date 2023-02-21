@@ -1,6 +1,8 @@
 ﻿using GameStore.BLL.Interfaces;
 using GameStore.BLL.Services;
+using GameStore.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GameStore.Controllers
 {
@@ -21,16 +23,16 @@ namespace GameStore.Controllers
             var model = new IndexViewModel();
             var gameGenres = this.genreService.GetAll();
 
-            genreList = new List<SelectListItem>();
+            var genreList = new List<SelectListItem>();
             foreach (var genre in gameGenres)
             {
                 genreList.Add(new SelectListItem(genre.Name, genre.Id.ToString()));
             }
 
             model.FilterGenres = genreList;
-            model.Games = gameService.GetAll();
+            model.Games = (List<BLL.Models.GameModel>)gameService.GetAll();//?
 
-            return View("Index", postModel);
+            return View("Index", model);
         }
 
         [HttpPost]
@@ -38,7 +40,7 @@ namespace GameStore.Controllers
         {
             var searchString = postModel.FilterString;
             var selectedGenres = postModel.FilterGenres.Where(s => s.Selected).Select(s => s.Value).ToList();
-            var filteredGames = gameService.Get(searchString, selectedGenres);
+            var filteredGames = gameService.GetByFilterAsync(searchString, selectedGenres);
 
             postModel.Games = filteredGames;
 

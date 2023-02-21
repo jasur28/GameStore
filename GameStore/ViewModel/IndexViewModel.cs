@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GameStore.BLL.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GameStore.ViewModel
 {
     public class IndexViewModel
     {
-        public List<SelectListItems> FilterGenres { get; set; }
+        public List<SelectListItem> FilterGenres { get; set; }
         public string FilterString { get; set; }
-
         public List<GameModel> Games { get; set; }
     }
 }
