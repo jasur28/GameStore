@@ -16,6 +16,7 @@ builder.Services.AddDbContext<GameStoreDbContext>(options => options.UseSqlServe
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddAutoMapper(typeof(AutomapperProfile));
 
 //Add Identity

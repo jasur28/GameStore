@@ -15,7 +15,7 @@ namespace GameStore.DAL.Repositories
         {
         }
 
-        public IEnumerable<Comment> GetByGameId(Guid id)
+        public IEnumerable<Comment> GetAllByGameId(Guid id)
         {
             return dbContext.Set<Comment>().Where(g=>g.GameId==id).OrderBy(x => x.CommentDate);
         }

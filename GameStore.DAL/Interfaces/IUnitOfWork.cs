@@ -10,6 +10,7 @@ namespace GameStore.DAL.Interfaces
     {
         IGameRepository GameRepository { get; }
         IGenreRepository GenreRepository { get; }
+        ICommentRepository CommentRepository { get; }
         Task SaveAsync();
     }
 }

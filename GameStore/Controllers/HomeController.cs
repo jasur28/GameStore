@@ -25,7 +25,7 @@ namespace GameStore.Controllers
                 return View(gameService.GetByFilterAsync(searchString));
             }
             
-        }
+        }  
 
         public IActionResult About()
         {

@@ -1,4 +1,8 @@
-﻿@model GameStore.BLL.Models.GameModel
+﻿@model GameStore.ViewModel.CommentViewModel
+@using GameStore.DAL.Entities
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Details";
 	
@@ -10,16 +14,15 @@
 		<div class="col-lg-3 col-md-6">
 	<div class="review-item">
 		@{
-			var base64 = Convert.ToBase64String(Model.Photo);
+			var base64 = Convert.ToBase64String(@Model.Game.Photo);
 			var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
 		 }
 	
 		<div class="review-cover set-bg" data-setbg="@imgSrc">
-					<div class="score purple">@Model.Price $</div>
+						<div class="score purple">@Model.Game.Price $</div>
 		</div>
-		
 
-				@foreach (var assignedTeam in Model.GameGenres)
+				@foreach (var assignedTeam in Model.Game.GameGenres)
 				{
 						<div class="row">
 							<h4>@assignedTeam.Genre.Name</h4>
@@ -27,18 +30,37 @@
 				}
 		
 		<div class="review-text">
-				<h5>@Model.Name</h5>
-				<p>@Model.Description</p>
+						<h5>@Model.Game.Name</h5>
+						<p>@Model.Game.Description</p>
 		</div>
 				<div>
-					<a asp-controller="Game" asp-action="Edit" asp-route-id="@Model.Id"><input type="button" class="btn btn-warning" value="Edit Game" /></a>
-					<a asp-controller="Game" asp-action="Delete" asp-route-id="@Model.Id"><input type="button" class="btn btn-danger" value="Delete Game" /></a>
+					<a asp-controller="Game" asp-action="Edit" asp-route-id="@Model.Game.Id"><input type="button" class="btn btn-warning" value="Edit Game" /></a>
+						<a asp-controller="Game" asp-action="Delete" asp-route-id="@Model.Game.Id"><input type="button" class="btn btn-danger" value="Delete Game" /></a>
 				</div>
 	</div>
 	</div>
 		
 </div>
 </div>
+
+<table class="table">
+	@foreach(var comment in Model.Comment)
+	{
+		<tr>
+			<td>
+					<span style="margin-right:15px; font-size:16px; color:green">
+						@UserManager.GetUserAsync(User).Result.UserName
+					</span>
+					<span style="font-size:14px">
+						@Html.DisplayFor(modelitem => comment.CommentText)
+					</span>
+					<span style="margin-left:10px">
+						@comment.CommentDate
+					</span>
+			</td>
+		</tr>
+	}
+</table>
 
 <div>
 	<a asp-controller="Home" asp-action="Index"><input type="button" class="btn btn-success" value="Back" /></a>

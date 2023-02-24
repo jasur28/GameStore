@@ -24,10 +24,9 @@ namespace GameStore.BLL.Services
         }
         public void Add(CommentModel model)
 		{
-            var item = mapper.Map<Game>(model);
-            unitOfWork.GameRepository.Add(item);
+            var item = mapper.Map<Comment>(model);
+            unitOfWork.CommentRepository.Add(item);
             unitOfWork.SaveAsync();
-            throw new NotImplementedException();
 		}
 
 		public void Delete(Guid id)
@@ -37,8 +36,14 @@ namespace GameStore.BLL.Services
 
 		public IEnumerable<CommentModel> GetAll()
 		{
-			throw new NotImplementedException();
-		}
+            throw new NotImplementedException();
+        }
+
+		public IEnumerable<CommentModel> GetAllByGameId(Guid id)
+		{
+			var items = unitOfWork.CommentRepository.GetAllByGameId(id);
+            return mapper.Map<IEnumerable<CommentModel>>(items);
+        }
 
 		public CommentModel GetById(Guid id)
 		{

@@ -10,7 +10,7 @@ namespace GameStore.DAL.Entities
     {
         public string CommentText { get; set; }
         public DateTime CommentDate { get; set; }
-        public Guid ParentId { get; set; }
+        public Guid? ParentId { get; set; }
         public Guid UserId { get; set; }
         public Guid GameId { get; set; }
         public ApplicationUser User { get; set; }

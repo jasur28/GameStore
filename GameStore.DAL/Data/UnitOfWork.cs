@@ -9,13 +9,16 @@ namespace GameStore.DAL.Data
         private readonly GameStoreDbContext _gameStoreDbContext;
         private IGameRepository _gameRepository;
         private IGenreRepository _genreRepository;
-        
+        private ICommentRepository _commentRepository;
+
         public UnitOfWork(GameStoreDbContext gameStoreDbContext)
         {
             _gameStoreDbContext = gameStoreDbContext;
         }
         public IGameRepository GameRepository => _gameRepository
             = _gameRepository ?? new GameRepository(_gameStoreDbContext);
+        public ICommentRepository CommentRepository => _commentRepository
+            = _commentRepository ?? new CommentRepository(_gameStoreDbContext);
         public IGenreRepository GenreRepository => _genreRepository
             = _genreRepository ?? new GenreRepository(_gameStoreDbContext);
 

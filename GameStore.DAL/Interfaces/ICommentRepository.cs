@@ -9,6 +9,6 @@ namespace GameStore.DAL.Interfaces
 {
     public interface ICommentRepository : IRepository<Comment>
     {
-        public IEnumerable<Comment> GetByGameId(Guid id);
+        public IEnumerable<Comment> GetAllByGameId(Guid id);
     }
 }

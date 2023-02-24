@@ -11,10 +11,12 @@ namespace GameStore.Controllers
     {
         private readonly IGameService gameService;
         private readonly IGenreService genreService;
-        public GameController(IGameService gameService, IGenreService genreService)
+        private readonly ICommentService commentService;
+        public GameController(IGameService gameService, IGenreService genreService,ICommentService commentService)
         {
             this.gameService = gameService;
             this.genreService = genreService;
+            this.commentService = commentService;
         }
         //Get: Game/Create
         public IActionResult Create()
@@ -78,12 +80,19 @@ namespace GameStore.Controllers
             return View(item);
         }
 
-        // POST: Game/Details/Id
+        // Get: Game/Details/Id
         public IActionResult Details(Guid id)
         {
-            var item = gameService.GetById(id);
+            var game = gameService.GetById(id);
+            CommentViewModel result = new CommentViewModel();
+            result.Game = game;
             
-            return View(item);
+
+            var comments =  commentService.GetAllByGameId(id);
+
+            result.Comment = comments.ToList();
+            
+            return View(result);
         }
 
         // GET /Game/Edit/Id
