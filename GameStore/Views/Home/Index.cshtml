@@ -1,4 +1,69 @@
-﻿@model IEnumerable<GameStore.BLL.Models.GameModel>
+﻿@model IEnumerable<GameStore.BLL.Models.GameModel>	
+<!-- Page info section -->
+<section class="page-info-section set-bg" data-setbg="img/page-top-bg/3.jpg">
+	<div class="pi-content">
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-5 col-lg-6 text-white">
+					<h2>Game reviews</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Page info section -->
+<!-- Page section -->
+<section class="page-section review-page spad">
+	<div class="container">
+		<!--Button and Search filter -->
+		<a asp-controller="Game" asp-action="Create"><input type="button" class="btn btn-success" value="Add Game" /></a>
+		<form asp-controller="Home" asp-action="Index" method="get">
+			<p>
+				<input type="text" name="SearchString" />
+				<input type="submit" value="Search" />
+			</p>
+		</form>
+		<!--Button and Search filter END-->
+		<div class="row">
+			@foreach(var p in Model)
+			{
+			<div class="col-md-6">
+				<div class="review-item">
+					@{
+						var base64 = Convert.ToBase64String(p.Photo);
+						var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+					}
+					<a asp-controller="Game" asp-action="Details" asp-route-id="@p.Id">
+
+					<div class="review-cover set-bg" data-setbg="@imgSrc"></div>
+					</a>
+					<div class="review-text">
+							<h4>@p.Name</h4>
+						
+							<p>@p.Description</p>
+
+						<button type="button" class="btn btn-success">Buy $@p.Price</button> 
+
+					</div>
+				</div>
+			</div>
+			}
+		</div>
+		<div class="text-center pt-4">
+			<button class="site-btn btn-sm">Load More</button>
+		</div>
+	</div>
+</section>
+<!-- Page section end -->
+
+
+
+
+
+
+
+@*@model IEnumerable<GameStore.BLL.Models.GameModel>
 
 
 <section class="review-section spad set-bg" data-setbg="https://themewagon.github.io/game-warrior/img/pattern.png">
@@ -41,4 +106,4 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section>*@

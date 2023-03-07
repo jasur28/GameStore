@@ -6,5 +6,5 @@ namespace GameStore.ViewModel
 	{
 		public GameModel Game { get; set; }
 		public List<CommentModel> Comment { get; set; }
-	}
+    }
 }

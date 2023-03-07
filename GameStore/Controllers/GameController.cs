@@ -1,6 +1,8 @@
 ﻿using GameStore.BLL.Interfaces;
 using GameStore.BLL.Models;
+using GameStore.DAL.Entities;
 using GameStore.ViewModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -12,11 +14,16 @@ namespace GameStore.Controllers
         private readonly IGameService gameService;
         private readonly IGenreService genreService;
         private readonly ICommentService commentService;
-        public GameController(IGameService gameService, IGenreService genreService,ICommentService commentService)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public GameController(IGameService gameService,
+            IGenreService genreService,
+            ICommentService commentService,
+            UserManager<ApplicationUser> userManager)
         {
             this.gameService = gameService;
             this.genreService = genreService;
             this.commentService = commentService;
+            _userManager = userManager;
         }
         //Get: Game/Create
         public IActionResult Create()
@@ -86,12 +93,8 @@ namespace GameStore.Controllers
             var game = gameService.GetById(id);
             CommentViewModel result = new CommentViewModel();
             result.Game = game;
-            
+            result.Comment = commentService.GetAllByGameId(id).ToList();
 
-            var comments =  commentService.GetAllByGameId(id);
-
-            result.Comment = comments.ToList();
-            
             return View(result);
         }
 
@@ -182,6 +185,5 @@ namespace GameStore.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
     }
 }

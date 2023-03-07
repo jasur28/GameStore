@@ -61,7 +61,7 @@ namespace GameStore.Controllers
                 var user = await _userManager.FindByEmailAsync(loginModel.Email);
                 if (user != null)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user, loginModel.Password, false, true);
+                    var result = await _signInManager.PasswordSignInAsync(user, loginModel.Password, loginModel.RememberMe, true);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Index", "Home");

@@ -73,7 +73,6 @@ namespace GameStore.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("PhotoFileName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("ProfilePicture")
@@ -121,17 +120,17 @@ namespace GameStore.DAL.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -233,22 +232,22 @@ namespace GameStore.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f0fff0da-8428-4c9e-ac7a-cf5e99e12a54",
-                            ConcurrencyStamp = "2259514e-9878-4fd5-9527-094a0c554063",
+                            Id = "0b4fa43f-6722-41ef-ae99-34f23d171277",
+                            ConcurrencyStamp = "9002cb4a-5d9f-44f3-8aa1-c9ef18917c34",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "00cf5380-1eb3-4350-b71e-e21086c8a093",
-                            ConcurrencyStamp = "a14a9b61-5b2c-406a-bf0d-e278ee26e942",
+                            Id = "5a42c84a-a29c-44f1-98e1-b338ff42022f",
+                            ConcurrencyStamp = "5b9dddd1-2e0e-4730-b757-268b5e9b7c4a",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "7ff67813-a193-4526-b1f1-c18894130b59",
-                            ConcurrencyStamp = "483698e5-2160-41c7-ba33-cb44999fb0e6",
+                            Id = "b4dc3fe3-d6a4-4117-8818-7c4f6a70cf71",
+                            ConcurrencyStamp = "3081355c-0f23-4d1d-9256-fe18b9b8807e",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         });
@@ -363,16 +362,25 @@ namespace GameStore.DAL.Migrations
             modelBuilder.Entity("GameStore.DAL.Entities.Comment", b =>
                 {
                     b.HasOne("GameStore.DAL.Entities.Game", "Game")
-                        .WithMany()
+                        .WithMany("GameComments")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GameStore.DAL.Entities.Comment", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("GameStore.DAL.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
+                        .WithMany("UserComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Game");
+
+                    b.Navigation("Parent");
 
                     b.Navigation("User");
                 });
@@ -454,8 +462,20 @@ namespace GameStore.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("GameStore.DAL.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("UserComments");
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.Comment", b =>
+                {
+                    b.Navigation("Children");
+                });
+
             modelBuilder.Entity("GameStore.DAL.Entities.Game", b =>
                 {
+                    b.Navigation("GameComments");
+
                     b.Navigation("GameGenres");
                 });
 

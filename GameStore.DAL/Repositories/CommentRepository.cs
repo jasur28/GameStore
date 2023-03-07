@@ -1,6 +1,7 @@
 ﻿using GameStore.DAL.Data;
 using GameStore.DAL.Entities;
 using GameStore.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
