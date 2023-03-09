@@ -97,6 +97,32 @@ namespace GameStore.Controllers
 
             return View(result);
         }
+        // Post: Game/Details/Id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Details(CommentViewModel commentViewModel)
+        {
+            CommentModel model = new CommentModel();
+            if (commentViewModel.PostType == "comment")
+            {
+                model.Id = Guid.NewGuid();
+                model.GameId = commentViewModel.GameId;
+                model.UserId = _userManager.GetUserAsync(User).Result.Id.ToString();
+                model.CommentText = commentViewModel.CommentText;
+                model.CommentDate = DateTime.Now;
+            }
+            else
+            {
+                model.Id = Guid.NewGuid();
+                model.GameId = commentViewModel.GameId;
+                model.UserId = _userManager.GetUserAsync(User).Result.Id.ToString();
+                model.CommentText = commentViewModel.CommentText;
+                model.CommentDate = DateTime.Now;
+                //model.ParentId = commentViewModel.ParentId;
+            }
+            commentService.Add(model);
+            return RedirectToAction();
+        }
 
         // GET /Game/Edit/Id
         public IActionResult Edit(Guid id)
