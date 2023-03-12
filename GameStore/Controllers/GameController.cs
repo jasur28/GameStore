@@ -99,29 +99,21 @@ namespace GameStore.Controllers
         }
         // Post: Game/Details/Id
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Details(CommentViewModel commentViewModel)
         {
             CommentModel model = new CommentModel();
-            if (commentViewModel.PostType == "comment")
+            model.Id = Guid.NewGuid();
+            model.GameId = commentViewModel.GameId;
+            model.UserId = _userManager.GetUserAsync(User).Result.Id.ToString();
+            model.CommentText = commentViewModel.CommentText;
+            model.CommentDate = DateTime.Now;
+            if (commentViewModel.PostType == "reply")
             {
-                model.Id = Guid.NewGuid();
-                model.GameId = commentViewModel.GameId;
-                model.UserId = _userManager.GetUserAsync(User).Result.Id.ToString();
-                model.CommentText = commentViewModel.CommentText;
-                model.CommentDate = DateTime.Now;
-            }
-            else
-            {
-                model.Id = Guid.NewGuid();
-                model.GameId = commentViewModel.GameId;
-                model.UserId = _userManager.GetUserAsync(User).Result.Id.ToString();
-                model.CommentText = commentViewModel.CommentText;
-                model.CommentDate = DateTime.Now;
-                //model.ParentId = commentViewModel.ParentId;
+                model.ParentId = commentViewModel.ParentId;
             }
             commentService.Add(model);
-            return RedirectToAction();
+
+            return RedirectToAction("Details", new { id = commentViewModel.GameId }); 
         }
 
         // GET /Game/Edit/Id
@@ -210,6 +202,24 @@ namespace GameStore.Controllers
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        // GET /Game/DeleteComment/ID
+        public IActionResult DeleteComment(Guid id)
+        {
+            var item = commentService.GetById(id);
+            var gameId = item.GameId;
+            if (item == null)
+            {
+                TempData["Error"] = "The comment does not exist!";
+            }
+            else
+            {
+                commentService.Delete(item.Id);
+                TempData["Success"] = "The comment has been deleted!";
+            }
+
+            return RedirectToAction("Details", new { id = gameId });
         }
     }
 }
