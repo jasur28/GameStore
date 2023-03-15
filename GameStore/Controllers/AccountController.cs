@@ -1,4 +1,5 @@
-﻿using GameStore.DAL.Entities;
+﻿using GameStore.BLL.Interfaces;
+using GameStore.DAL.Entities;
 using GameStore.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,14 +13,16 @@ namespace GameStore.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ICommentService commentService;
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager, ICommentService commentService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            this.commentService = commentService;
         }
         public IActionResult Register()
         {
@@ -79,7 +82,9 @@ namespace GameStore.Controllers
 
         public IActionResult Profile()
         {
+            
             var userId =  _userManager.GetUserId(HttpContext.User);
+            var comments = commentService.GetAll().Where(u => u.UserId == userId).Where(c=>c.IsDeleted==true);
             ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
             ProfileViewModel profileViewModel = new ProfileViewModel()
             {
@@ -87,7 +92,8 @@ namespace GameStore.Controllers
                 LastName = user.LastName,
                 Username = user.UserName,
                 ProfilePicture = user.ProfilePicture,
-                Email = user.Email
+                Email = user.Email,
+                Comments = comments.ToList()
             };
             return View(profileViewModel);
         }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameStore.DAL.Migrations
 {
     [DbContext(typeof(GameStoreDbContext))]
-    [Migration("20230227162109_ModifiedCommentTable2")]
-    partial class ModifiedCommentTable2
+    [Migration("20230314063210_addedpropertyISDELETED")]
+    partial class addedpropertyISDELETED
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -75,7 +75,6 @@ namespace GameStore.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("PhotoFileName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("ProfilePicture")
@@ -110,14 +109,8 @@ namespace GameStore.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CommentDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CommentId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CommentText")
                         .IsRequired()
@@ -126,16 +119,23 @@ namespace GameStore.DAL.Migrations
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("GameeeeId")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("CommentId");
-
                     b.HasIndex("GameId");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -237,22 +237,22 @@ namespace GameStore.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6756a449-eef8-468c-8953-e3b199312dc8",
-                            ConcurrencyStamp = "6b744849-eed2-43f7-b04b-202e2a0944f3",
+                            Id = "0400fb39-16b3-45c3-ba41-c8be9eddf999",
+                            ConcurrencyStamp = "ba9a4ce7-f50a-4775-a630-09bb00d2b7bb",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "f9b3c01e-9bc7-420a-a7c1-5f0d6748a6de",
-                            ConcurrencyStamp = "a44efdcf-d607-4672-8311-b5d6a8f6ea1c",
+                            Id = "46f7b525-2cfd-4517-9dc3-e3067914e46e",
+                            ConcurrencyStamp = "38e4eefd-615a-4fa4-ac2a-e6587aaab49b",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "b2ea1e08-6e79-436d-82a4-712164e8e74f",
-                            ConcurrencyStamp = "4a1a8e33-4a26-4fad-9c41-fa41829d5e25",
+                            Id = "d0900d2e-977b-4c04-8525-5e9ef2afb909",
+                            ConcurrencyStamp = "b97f6631-adc2-41bd-989c-a504d816ff4d",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         });
@@ -366,23 +366,28 @@ namespace GameStore.DAL.Migrations
 
             modelBuilder.Entity("GameStore.DAL.Entities.Comment", b =>
                 {
-                    b.HasOne("GameStore.DAL.Entities.ApplicationUser", "ApplicationUser")
-                        .WithMany("Comment")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("GameStore.DAL.Entities.Comment", null)
-                        .WithMany("Parent")
-                        .HasForeignKey("CommentId");
-
                     b.HasOne("GameStore.DAL.Entities.Game", "Game")
-                        .WithMany()
+                        .WithMany("GameComments")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.HasOne("GameStore.DAL.Entities.Comment", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("GameStore.DAL.Entities.ApplicationUser", "User")
+                        .WithMany("UserComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Game");
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.GameGenre", b =>
@@ -464,16 +469,18 @@ namespace GameStore.DAL.Migrations
 
             modelBuilder.Entity("GameStore.DAL.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("Comment");
+                    b.Navigation("UserComments");
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Comment", b =>
                 {
-                    b.Navigation("Parent");
+                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Game", b =>
                 {
+                    b.Navigation("GameComments");
+
                     b.Navigation("GameGenres");
                 });
 

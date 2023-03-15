@@ -1,0 +1,30 @@
+﻿@model GameStore.BLL.Models.CommentModel
+ <div class="modal fade" id="DeleteComment-@Model.Id" aria-labelledby="deleteCommentLabel" aria-hidden="true">
+     <div class="modal-dialog">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="deleteCommentLabel">Delete Comment</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                <form asp-controller="Comment" asp-action="DeleteComment" method="post">
+                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                     <div class="form-group">
+                        <input type="hidden" asp-for="GameId" value="@Model.GameId" />
+                        <input type="hidden" asp-for="Id" value="@Model.Id" />
+                        <input type="hidden" asp-for="ParentId" value="@Model.ParentId" />
+                        <input type="hidden" asp-for="CommentDate" value="@Model.CommentDate" />
+                        <textarea type="text" asp-for="CommentText" maxlength="600"
+                                  style="width:100%; height:60px;"></textarea>
+                     </div>
+                     <div class="modal-footer">
+                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                         <button type="submit" class="btn btn-primary">Yes</button>
+                     </div>
+                 </form>
+             </div>
+         </div>
+     </div>
+</div>

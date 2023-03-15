@@ -1,50 +1,49 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace GameStore.DAL.Migrations
 {
-    public partial class ModifiedCommentTable2 : Migration
+    public partial class addedpropertyISDELETED : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "38a766ca-4cf8-417b-a8df-36cb271585af");
+                keyValue: "98540fd5-b401-4e57-ac82-8b9a965c081e");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "4a89f96b-97a0-45c7-8552-2033df165252");
+                keyValue: "adae435c-1aba-4146-8c11-41fbdd7ce9a1");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "f5a165dd-433c-4423-90c4-9124744f919c");
+                keyValue: "b51c1482-8aa5-46c9-bda2-3f25adaba1d8");
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "GameeeeId",
+            migrationBuilder.AddColumn<bool>(
+                name: "IsDeleted",
                 table: "Comments",
-                type: "uniqueidentifier",
+                type: "bit",
                 nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                defaultValue: false);
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6756a449-eef8-468c-8953-e3b199312dc8", "6b744849-eed2-43f7-b04b-202e2a0944f3", "User", "USER" });
+                values: new object[] { "0400fb39-16b3-45c3-ba41-c8be9eddf999", "ba9a4ce7-f50a-4775-a630-09bb00d2b7bb", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "b2ea1e08-6e79-436d-82a4-712164e8e74f", "4a1a8e33-4a26-4fad-9c41-fa41829d5e25", "Manager", "MANAGER" });
+                values: new object[] { "46f7b525-2cfd-4517-9dc3-e3067914e46e", "38e4eefd-615a-4fa4-ac2a-e6587aaab49b", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "f9b3c01e-9bc7-420a-a7c1-5f0d6748a6de", "a44efdcf-d607-4672-8311-b5d6a8f6ea1c", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "d0900d2e-977b-4c04-8525-5e9ef2afb909", "b97f6631-adc2-41bd-989c-a504d816ff4d", "Manager", "MANAGER" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -52,36 +51,36 @@ namespace GameStore.DAL.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "6756a449-eef8-468c-8953-e3b199312dc8");
+                keyValue: "0400fb39-16b3-45c3-ba41-c8be9eddf999");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "b2ea1e08-6e79-436d-82a4-712164e8e74f");
+                keyValue: "46f7b525-2cfd-4517-9dc3-e3067914e46e");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "f9b3c01e-9bc7-420a-a7c1-5f0d6748a6de");
+                keyValue: "d0900d2e-977b-4c04-8525-5e9ef2afb909");
 
             migrationBuilder.DropColumn(
-                name: "GameeeeId",
+                name: "IsDeleted",
                 table: "Comments");
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "38a766ca-4cf8-417b-a8df-36cb271585af", "9034b065-cedc-415f-8afa-96247b126bdd", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "98540fd5-b401-4e57-ac82-8b9a965c081e", "ecb3910a-2966-48b2-bccc-a6adda9e7975", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "4a89f96b-97a0-45c7-8552-2033df165252", "8be1a36a-2dc7-4d6b-8fa3-201a792dfe50", "User", "USER" });
+                values: new object[] { "adae435c-1aba-4146-8c11-41fbdd7ce9a1", "ba1f32f4-10c6-4cfa-addd-e907ebdd1e0d", "Manager", "MANAGER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "f5a165dd-433c-4423-90c4-9124744f919c", "ed8d172c-94e1-4592-8778-a5a4b4f48541", "Manager", "MANAGER" });
+                values: new object[] { "b51c1482-8aa5-46c9-bda2-3f25adaba1d8", "adb53d25-c690-47e0-8a85-1e9378d152ca", "Administrator", "ADMINISTRATOR" });
         }
     }
 }

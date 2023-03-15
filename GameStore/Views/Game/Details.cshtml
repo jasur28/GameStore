@@ -48,7 +48,7 @@
                     <h4 class="comment-title">Comments</h4>
                     <ul class="comment-list">
 
-                        @foreach (var comments in Model.Comment.Where(x => x.ParentId == null))
+                        @foreach (var comments in Model.Comments.Where(x => x.ParentId == null))
                         {
                             <li>
                                 <div class="comment">
@@ -58,24 +58,71 @@
                                     }
                                     <div class="comment-content">
                                         <h5>@comments.User.FirstName @comments.User.LastName<span>@comments.CommentDate</span></h5>
-                                        <p>@comments.CommentText</p>
-                                        <a href="" id="@comments.Id" class="reply">Reply</a>
-                                        <a asp-controller="Game" asp-action="DeleteComment" asp-route-id="@comments.Id" class="reply">Edit</a>
-                                        <a asp-controller="Game" asp-action="DeleteComment" asp-route-id="@comments.Id" class="reply">Delete</a>
+                                        @if (comments.IsDeleted)
+                                        {
+                                            <p>Deleted</p>
+                                        }
+                                        else
+                                        {
+                                            <p>@comments.CommentText</p>
+                                            @if (comments.UserId != UserManager.GetUserAsync(User).Result.Id)
+                                            {
+                                                <a href="" id="@comments.Id" class="reply">Reply</a>
+                                            }
+                                        }
+
+                                        @if (comments.UserId == UserManager.GetUserAsync(User).Result.Id && !comments.IsDeleted)
+                                        {
+                                            <a asp-controller="Comment" asp-action="EditComment" asp-route-id="@comments.Id" class="reply" data-toggle="modal" data-target="@("#EditComment-"+comments.Id)">Edit</a>
+                                            @await Html.PartialAsync("_EditCommentPartialView", comments)
+                                            <a asp-controller="Comment" asp-action="DeleteComment" asp-route-id="@comments.Id" class="reply" data-toggle="modal" data-target="@("#DeleteComment-"+comments.Id)">Delete</a>
+                                            @await Html.PartialAsync("_DeleteCommentPartialView", comments)
+
+
+                                        }
+                                        else if (comments.UserId == UserManager.GetUserAsync(User).Result.Id)
+                                        {
+                                            <a asp-controller="Comment" asp-action="RestoreComment" asp-route-id="@comments.Id" class="reply" data-toggle="modal" data-target="@("#RestoreComment-"+comments.Id)">Restore</a>
+                                            @await Html.PartialAsync("_RestoreCommentPartialView", comments)
+                                        }
                                         <!-- For-->
                                         @foreach (var replies in comments.Children)
                                         {
                                             <div class="comment-reply">
                                                 <div class="comment">
-                                                    @if (comments.User.ProfilePicture != null)
+                                                    @if (replies.User.ProfilePicture != null)
                                                     {
                                                         <div class="comment-avator set-bg" data-setbg="data:image/*;base64,@(Convert.ToBase64String(replies.User.ProfilePicture))"></div>
                                                     }
                                                     <div class="comment-content">
                                                         <h5>@replies.User.FirstName @replies.User.LastName<span>@replies.CommentDate</span></h5>
-                                                        <p>@replies.CommentText</p>
-                                                        <a href="" id="@comments.Id" class="reply">Reply</a>
-                                                        <a asp-controller="Game" asp-action="DeleteComment" asp-route-id="@replies.Id" class="reply">Delete</a>
+                                                        @if (replies.IsDeleted)
+                                                        {
+                                                            <p>Deleted</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>@replies.CommentText</p>
+                                                            @if (replies.UserId != UserManager.GetUserAsync(User).Result.Id)
+                                            {
+                                                <a href="" id="@replies.Id" class="reply">Reply</a>
+                                            }
+                                                        }
+
+
+
+                                                        @if (replies.UserId == UserManager.GetUserAsync(User).Result.Id && !replies.IsDeleted)
+                                                        {
+                                                            <a asp-controller="Comment" asp-action="EditComment" asp-route-id="@replies.Id" class="reply" data-toggle="modal" data-target="@("#EditComment-"+replies.Id)">Edit</a>
+                                                            @await Html.PartialAsync("_EditCommentPartialView", replies)
+                                                            <a asp-controller="Comment" asp-action="DeleteComment" asp-route-id="@replies.Id" class="reply" data-toggle="modal" data-target="@("#DeleteComment-"+replies.Id)">Delete</a>
+                                                            @await Html.PartialAsync("_DeleteCommentPartialView", replies)
+                                                        }
+                                                        else if (replies.UserId == UserManager.GetUserAsync(User).Result.Id)
+                                                        {
+                                                            <a asp-controller="Comment" asp-action="RestoreComment" asp-route-id="@replies.Id" class="reply" data-toggle="modal" data-target="@("#RestoreComment-"+replies.Id)">Restore</a>
+                                                            @await Html.PartialAsync("_RestoreCommentPartialView", replies)
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
@@ -91,7 +138,6 @@
                     <h4 class="comment-title">Leave Your Comment</h4>
                     <form method="post" asp-action="Details" asp-controller="Game" enctype="multipart/form-data">
                         <input type="hidden" name="GameId" value="@Model.Game.Id" />
-                        <input type="hidden" name="PostType" value="comment" />
                         <div class="row">
                             <div class="col-lg-12">
                                 <textarea type="text" name="CommentText" maxlength="600" placeholder="Leave Comment ..."
@@ -108,7 +154,7 @@
 
 <script>
     @*//Get all comment elements*@
-    const comments = document.querySelectorAll('.comment');
+        const comments = document.querySelectorAll('.comment');
 
     @*//Add listeners to all reply buttons*@
         comments.forEach(comment => {
@@ -133,22 +179,22 @@
                 replyForm.classList.add('comment-reply-form');
 
                 const formHtml = `
-        <form method="post" id="reply-form" enctype="multipart/form-data">
+            <form method="post" id="reply-form" enctype="multipart/form-data">
 
-        <div class="row">
-            <div class="col-md-12">
-                    <input type="hidden" name="GameId" value="@Model.Game.Id" />
-                    <input type="hidden" name="PostType" value="reply" />
+            <div class="row">
+                <div class="col-md-12">
+                        <input type="hidden" name="GameId" value="@Model.Game.Id" />
+                        <input type="hidden" name="PostType" value="reply" />
 
-            <textarea name="CommentText" maxlength="600" placeholder="Your Reply"></textarea>
+                <textarea name="CommentText" maxlength="600" placeholder="Your Reply"></textarea>
+                </div>
+                <div class="col-md-12">
+                <button type="submit" class="submit-button site-btn btn-sm ">Send</button>
+                <button type="button" class="cancel-reply site-btn btn-sm">Cancel</button>
+                </div>
             </div>
-            <div class="col-md-12">
-            <button type="submit" class="submit-button site-btn btn-sm ">Send</button>
-            <button type="button" class="cancel-reply site-btn btn-sm">Cancel</button>
-            </div>
-        </div>
-        </form>
-        `;
+            </form>
+            `;
 
                 replyForm.innerHTML = formHtml;
 
@@ -185,7 +231,7 @@
             });
 
     @*Check the nesting level*@
-        const nestingLevel = comment.querySelectorAll('.comment-reply').length;
+            const nestingLevel = comment.querySelectorAll('.comment-reply').length;
 
             if (nestingLevel >= 3) {
                 replyButton.style.display = 'none';
@@ -194,54 +240,3 @@
         });
 </script>
 
-<!-- Page section end -->
-@*@model GameStore.ViewModel.CommentViewModel
-@using GameStore.DAL.Entities
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
-@{
-    ViewData["Title"] = "Details";
-
-}
-<div></div>
-<section class="review-section spad">
-<div class="container">
-<div class="row justify-content-center">
-		<div class="col-lg-3 col-md-6">
-	<div class="review-item">
-		@{
-			var base64 = Convert.ToBase64String(@Model.Game.Photo);
-			var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-		 }
-
-		<div class="review-cover set-bg" data-setbg="@imgSrc">
-						<div class="score purple">@Model.Game.Price $</div>
-		</div>
-
-				@foreach (var assignedTeam in Model.Game.GameGenres)
-				{
-						<div class="row">
-							<h4>@assignedTeam.Genre.Name</h4>
-						</div>
-				}
-
-		<div class="review-text">
-						<h5>@Model.Game.Name</h5>
-						<p>@Model.Game.Description</p>
-		</div>
-				<div>
-					<a asp-controller="Game" asp-action="Edit" asp-route-id="@Model.Game.Id"><input type="button" class="btn btn-warning" value="Edit Game" /></a>
-						<a asp-controller="Game" asp-action="Delete" asp-route-id="@Model.Game.Id"><input type="button" class="btn btn-danger" value="Delete Game" /></a>
-				</div>
-	</div>
-	</div>
-
-</div>
-</div>
-
-</section>
-
-<div>
-	<a asp-controller="Home" asp-action="Index"><input type="button" class="btn btn-success" value="Back" /></a>
-</div>*@

@@ -17,5 +17,6 @@ namespace GameStore.DAL.Entities
         public ApplicationUser User { get; set; }
         public Guid GameId { get; set; }
         public Game Game { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

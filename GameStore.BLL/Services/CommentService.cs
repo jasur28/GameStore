@@ -31,13 +31,15 @@ namespace GameStore.BLL.Services
 
 		public void Delete(Guid id)
 		{
-            unitOfWork.CommentRepository.DeleteById(id);
-            unitOfWork.SaveAsync();
+            //unitOfWork.CommentRepository.DeleteById(id);
+            //unitOfWork.SaveAsync();
+            throw new NotImplementedException();
         }
 
 		public IEnumerable<CommentModel> GetAll()
 		{
-            throw new NotImplementedException();
+            var items = unitOfWork.CommentRepository.GetAll();
+            return mapper.Map<IEnumerable<CommentModel>>(items);
         }
 
 		public IEnumerable<CommentModel> GetAllByGameId(Guid id)

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GameStore.BLL.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace GameStore.ViewModel
 {
@@ -14,5 +15,7 @@ namespace GameStore.ViewModel
         public string PhotoFileName { get; set; }
         [Display(Name = "Profile Picture")]
         public byte[] ProfilePicture { get; set; }
+
+        public List<CommentModel>? Comments { get; set; }
     }
 }

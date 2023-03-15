@@ -117,6 +117,9 @@ namespace GameStore.DAL.Migrations
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -232,22 +235,22 @@ namespace GameStore.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0b4fa43f-6722-41ef-ae99-34f23d171277",
-                            ConcurrencyStamp = "9002cb4a-5d9f-44f3-8aa1-c9ef18917c34",
+                            Id = "0400fb39-16b3-45c3-ba41-c8be9eddf999",
+                            ConcurrencyStamp = "ba9a4ce7-f50a-4775-a630-09bb00d2b7bb",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "5a42c84a-a29c-44f1-98e1-b338ff42022f",
-                            ConcurrencyStamp = "5b9dddd1-2e0e-4730-b757-268b5e9b7c4a",
+                            Id = "46f7b525-2cfd-4517-9dc3-e3067914e46e",
+                            ConcurrencyStamp = "38e4eefd-615a-4fa4-ac2a-e6587aaab49b",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "b4dc3fe3-d6a4-4117-8818-7c4f6a70cf71",
-                            ConcurrencyStamp = "3081355c-0f23-4d1d-9256-fe18b9b8807e",
+                            Id = "d0900d2e-977b-4c04-8525-5e9ef2afb909",
+                            ConcurrencyStamp = "b97f6631-adc2-41bd-989c-a504d816ff4d",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         });

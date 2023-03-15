@@ -93,7 +93,7 @@ namespace GameStore.Controllers
             var game = gameService.GetById(id);
             CommentViewModel result = new CommentViewModel();
             result.Game = game;
-            result.Comment = commentService.GetAllByGameId(id).ToList();
+            result.Comments = commentService.GetAllByGameId(id).ToList();
 
             return View(result);
         }
@@ -104,7 +104,7 @@ namespace GameStore.Controllers
             CommentModel model = new CommentModel();
             model.Id = Guid.NewGuid();
             model.GameId = commentViewModel.GameId;
-            model.UserId = _userManager.GetUserAsync(User).Result.Id.ToString();
+            model.UserId = _userManager.GetUserAsync(User).Result.Id;
             model.CommentText = commentViewModel.CommentText;
             model.CommentDate = DateTime.Now;
             if (commentViewModel.PostType == "reply")
@@ -202,24 +202,6 @@ namespace GameStore.Controllers
             }
 
             return RedirectToAction("Index", "Home");
-        }
-
-        // GET /Game/DeleteComment/ID
-        public IActionResult DeleteComment(Guid id)
-        {
-            var item = commentService.GetById(id);
-            var gameId = item.GameId;
-            if (item == null)
-            {
-                TempData["Error"] = "The comment does not exist!";
-            }
-            else
-            {
-                commentService.Delete(item.Id);
-                TempData["Success"] = "The comment has been deleted!";
-            }
-
-            return RedirectToAction("Details", new { id = gameId });
         }
     }
 }

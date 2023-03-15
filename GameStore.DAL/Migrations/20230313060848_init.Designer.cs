@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameStore.DAL.Migrations
 {
     [DbContext(typeof(GameStoreDbContext))]
-    [Migration("20230307125849_photofilenamenull")]
-    partial class photofilenamenull
+    [Migration("20230313060848_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -120,7 +120,6 @@ namespace GameStore.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ParentId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId")
@@ -235,22 +234,22 @@ namespace GameStore.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1d2ff6fc-f78b-442d-a717-bdbf5e60ef55",
-                            ConcurrencyStamp = "3d4a8832-c2fe-441d-a39a-19fd6c44e18f",
+                            Id = "98540fd5-b401-4e57-ac82-8b9a965c081e",
+                            ConcurrencyStamp = "ecb3910a-2966-48b2-bccc-a6adda9e7975",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "411968d9-ae08-4c14-a8ec-475fd8494ca8",
-                            ConcurrencyStamp = "b42c882d-436a-4bf0-8771-d9511b2f7207",
+                            Id = "b51c1482-8aa5-46c9-bda2-3f25adaba1d8",
+                            ConcurrencyStamp = "adb53d25-c690-47e0-8a85-1e9378d152ca",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "802b7468-ea90-4a7f-9d49-714ddbc3022c",
-                            ConcurrencyStamp = "d284bc88-5e3b-431e-a0de-c6c5edeaf581",
+                            Id = "adae435c-1aba-4146-8c11-41fbdd7ce9a1",
+                            ConcurrencyStamp = "ba1f32f4-10c6-4cfa-addd-e907ebdd1e0d",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         });
@@ -373,8 +372,7 @@ namespace GameStore.DAL.Migrations
                     b.HasOne("GameStore.DAL.Entities.Comment", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("GameStore.DAL.Entities.ApplicationUser", "User")
                         .WithMany("UserComments")
