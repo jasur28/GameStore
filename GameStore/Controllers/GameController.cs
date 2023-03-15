@@ -1,6 +1,8 @@
 ﻿using GameStore.BLL.Interfaces;
 using GameStore.BLL.Models;
+using GameStore.DAL.Entities;
 using GameStore.ViewModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -11,10 +13,17 @@ namespace GameStore.Controllers
     {
         private readonly IGameService gameService;
         private readonly IGenreService genreService;
-        public GameController(IGameService gameService, IGenreService genreService)
+        private readonly ICommentService commentService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public GameController(IGameService gameService,
+            IGenreService genreService,
+            ICommentService commentService,
+            UserManager<ApplicationUser> userManager)
         {
             this.gameService = gameService;
             this.genreService = genreService;
+            this.commentService = commentService;
+            _userManager = userManager;
         }
         //Get: Game/Create
         public IActionResult Create()
@@ -78,12 +87,33 @@ namespace GameStore.Controllers
             return View(item);
         }
 
-        // POST: Game/Details/Id
+        // Get: Game/Details/Id
         public IActionResult Details(Guid id)
         {
-            var item = gameService.GetById(id);
-            
-            return View(item);
+            var game = gameService.GetById(id);
+            CommentViewModel result = new CommentViewModel();
+            result.Game = game;
+            result.Comments = commentService.GetAllByGameId(id).ToList();
+
+            return View(result);
+        }
+        // Post: Game/Details/Id
+        [HttpPost]
+        public IActionResult Details(CommentViewModel commentViewModel)
+        {
+            CommentModel model = new CommentModel();
+            model.Id = Guid.NewGuid();
+            model.GameId = commentViewModel.GameId;
+            model.UserId = _userManager.GetUserAsync(User).Result.Id;
+            model.CommentText = commentViewModel.CommentText;
+            model.CommentDate = DateTime.Now;
+            if (commentViewModel.PostType == "reply")
+            {
+                model.ParentId = commentViewModel.ParentId;
+            }
+            commentService.Add(model);
+
+            return RedirectToAction("Details", new { id = commentViewModel.GameId }); 
         }
 
         // GET /Game/Edit/Id
@@ -173,6 +203,5 @@ namespace GameStore.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
     }
 }

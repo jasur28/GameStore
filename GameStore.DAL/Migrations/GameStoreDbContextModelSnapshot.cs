@@ -73,7 +73,6 @@ namespace GameStore.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("PhotoFileName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("ProfilePicture")
@@ -100,6 +99,43 @@ namespace GameStore.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CommentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CommentText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Game", b =>
@@ -199,22 +235,22 @@ namespace GameStore.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "381e2e2b-e51a-47fd-93c5-8a9135afff0f",
-                            ConcurrencyStamp = "e8f2e194-7379-4798-807d-e908653f9fe9",
+                            Id = "0400fb39-16b3-45c3-ba41-c8be9eddf999",
+                            ConcurrencyStamp = "ba9a4ce7-f50a-4775-a630-09bb00d2b7bb",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "12cafd69-e098-4fe1-86b1-0ba1d63b05e6",
-                            ConcurrencyStamp = "bb751a4c-2b00-4216-a018-81f1e2af7fcd",
+                            Id = "46f7b525-2cfd-4517-9dc3-e3067914e46e",
+                            ConcurrencyStamp = "38e4eefd-615a-4fa4-ac2a-e6587aaab49b",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "11abae3a-91d8-414c-82be-66bdd2e1f3be",
-                            ConcurrencyStamp = "c2e8eacc-1962-4a28-affd-3357129e85e2",
+                            Id = "d0900d2e-977b-4c04-8525-5e9ef2afb909",
+                            ConcurrencyStamp = "b97f6631-adc2-41bd-989c-a504d816ff4d",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         });
@@ -326,6 +362,32 @@ namespace GameStore.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("GameStore.DAL.Entities.Comment", b =>
+                {
+                    b.HasOne("GameStore.DAL.Entities.Game", "Game")
+                        .WithMany("GameComments")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GameStore.DAL.Entities.Comment", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("GameStore.DAL.Entities.ApplicationUser", "User")
+                        .WithMany("UserComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GameStore.DAL.Entities.GameGenre", b =>
                 {
                     b.HasOne("GameStore.DAL.Entities.Game", "Game")
@@ -403,8 +465,20 @@ namespace GameStore.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("GameStore.DAL.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("UserComments");
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.Comment", b =>
+                {
+                    b.Navigation("Children");
+                });
+
             modelBuilder.Entity("GameStore.DAL.Entities.Game", b =>
                 {
+                    b.Navigation("GameComments");
+
                     b.Navigation("GameGenres");
                 });
 

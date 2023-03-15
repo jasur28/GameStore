@@ -1,46 +1,242 @@
-﻿@model GameStore.BLL.Models.GameModel
+﻿@model GameStore.ViewModel.CommentViewModel
+@using GameStore.DAL.Entities
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @{
     ViewData["Title"] = "Details";
-	
+    TempData["ReloadPage"] = true;
 }
-<div></div>
-<section class="review-section spad set-bg" data-setbg="https://themewagon.github.io/game-warrior/img/pattern.png">
-<div class="container">
-<div class="row justify-content-center">
-		<div class="col-lg-3 col-md-6">
-	<div class="review-item">
-		@{
-			var base64 = Convert.ToBase64String(Model.Photo);
-			var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-		 }
-	
-		<div class="review-cover set-bg" data-setbg="@imgSrc">
-					<div class="score purple">@Model.Price $</div>
-		</div>
-		
-
-				@foreach (var assignedTeam in Model.GameGenres)
-				{
-						<div class="row">
-							<h4>@assignedTeam.Genre.Name</h4>
-						</div>
-				}
-		
-		<div class="review-text">
-				<h5>@Model.Name</h5>
-				<p>@Model.Description</p>
-		</div>
-				<div>
-					<a asp-controller="Game" asp-action="Edit" asp-route-id="@Model.Id"><input type="button" class="btn btn-warning" value="Edit Game" /></a>
-					<a asp-controller="Game" asp-action="Delete" asp-route-id="@Model.Id"><input type="button" class="btn btn-danger" value="Delete Game" /></a>
-				</div>
-	</div>
-	</div>
-		
-</div>
-</div>
-
-<div>
-	<a asp-controller="Home" asp-action="Index"><input type="button" class="btn btn-success" value="Back" /></a>
-</div>
+@{
+    var base64 = Convert.ToBase64String(@Model.Game.Photo);
+    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+}
+<!-- Page info section -->
+<section class="page-info-section set-bg" data-setbg="@imgSrc">
+    <div class="pi-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-5 col-lg-6 text-white">
+                    <h2>@Model.Game.Name</h2>
+                    <p>@Model.Game.Description</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+<!-- Page info section -->
+<!-- Page section -->
+<section class="page-section single-blog-page spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10">
+                <div class="blog-thumb set-bg" data-setbg="@imgSrc">
+                </div>
+                <div class="blog-content">
+                    @foreach (var assignedGame in Model.Game.GameGenres)
+                    {
+                        <div class="col-lg-10">
+                            <h4>@assignedGame.Genre.Name</h4>
+                        </div>
+                    }
+                    <h3>@Model.Game.Name</h3>
+                    <p>@Model.Game.Description</p>
+                </div>
+                <!--Comment section-->
+                <div class="comment-warp">
+                    <h4 class="comment-title">Comments</h4>
+                    <ul class="comment-list">
+
+                        @foreach (var comments in Model.Comments.Where(x => x.ParentId == null))
+                        {
+                            <li>
+                                <div class="comment">
+                                    @if (comments.User.ProfilePicture != null)
+                                    {
+                                        <div class="comment-avator set-bg" data-setbg="data:image/*;base64,@(Convert.ToBase64String(comments.User.ProfilePicture))"></div>
+                                    }
+                                    <div class="comment-content">
+                                        <h5>@comments.User.FirstName @comments.User.LastName<span>@comments.CommentDate</span></h5>
+                                        @if (comments.IsDeleted)
+                                        {
+                                            <p>Deleted</p>
+                                        }
+                                        else
+                                        {
+                                            <p>@comments.CommentText</p>
+                                            @if (comments.UserId != UserManager.GetUserAsync(User).Result.Id)
+                                            {
+                                                <a href="" id="@comments.Id" class="reply">Reply</a>
+                                            }
+                                        }
+
+                                        @if (comments.UserId == UserManager.GetUserAsync(User).Result.Id && !comments.IsDeleted)
+                                        {
+                                            <a asp-controller="Comment" asp-action="EditComment" asp-route-id="@comments.Id" class="reply" data-toggle="modal" data-target="@("#EditComment-"+comments.Id)">Edit</a>
+                                            @await Html.PartialAsync("_EditCommentPartialView", comments)
+                                            <a asp-controller="Comment" asp-action="DeleteComment" asp-route-id="@comments.Id" class="reply" data-toggle="modal" data-target="@("#DeleteComment-"+comments.Id)">Delete</a>
+                                            @await Html.PartialAsync("_DeleteCommentPartialView", comments)
+
+
+                                        }
+                                        else if (comments.UserId == UserManager.GetUserAsync(User).Result.Id)
+                                        {
+                                            <a asp-controller="Comment" asp-action="RestoreComment" asp-route-id="@comments.Id" class="reply" data-toggle="modal" data-target="@("#RestoreComment-"+comments.Id)">Restore</a>
+                                            @await Html.PartialAsync("_RestoreCommentPartialView", comments)
+                                        }
+                                        <!-- For-->
+                                        @foreach (var replies in comments.Children)
+                                        {
+                                            <div class="comment-reply">
+                                                <div class="comment">
+                                                    @if (replies.User.ProfilePicture != null)
+                                                    {
+                                                        <div class="comment-avator set-bg" data-setbg="data:image/*;base64,@(Convert.ToBase64String(replies.User.ProfilePicture))"></div>
+                                                    }
+                                                    <div class="comment-content">
+                                                        <h5>@replies.User.FirstName @replies.User.LastName<span>@replies.CommentDate</span></h5>
+                                                        @if (replies.IsDeleted)
+                                                        {
+                                                            <p>Deleted</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>@replies.CommentText</p>
+                                                            @if (replies.UserId != UserManager.GetUserAsync(User).Result.Id)
+                                            {
+                                                <a href="" id="@replies.Id" class="reply">Reply</a>
+                                            }
+                                                        }
+
+
+
+                                                        @if (replies.UserId == UserManager.GetUserAsync(User).Result.Id && !replies.IsDeleted)
+                                                        {
+                                                            <a asp-controller="Comment" asp-action="EditComment" asp-route-id="@replies.Id" class="reply" data-toggle="modal" data-target="@("#EditComment-"+replies.Id)">Edit</a>
+                                                            @await Html.PartialAsync("_EditCommentPartialView", replies)
+                                                            <a asp-controller="Comment" asp-action="DeleteComment" asp-route-id="@replies.Id" class="reply" data-toggle="modal" data-target="@("#DeleteComment-"+replies.Id)">Delete</a>
+                                                            @await Html.PartialAsync("_DeleteCommentPartialView", replies)
+                                                        }
+                                                        else if (replies.UserId == UserManager.GetUserAsync(User).Result.Id)
+                                                        {
+                                                            <a asp-controller="Comment" asp-action="RestoreComment" asp-route-id="@replies.Id" class="reply" data-toggle="modal" data-target="@("#RestoreComment-"+replies.Id)">Restore</a>
+                                                            @await Html.PartialAsync("_RestoreCommentPartialView", replies)
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        <!-- For End Section-->
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="comment-form-warp">
+                    <h4 class="comment-title">Leave Your Comment</h4>
+                    <form method="post" asp-action="Details" asp-controller="Game" enctype="multipart/form-data">
+                        <input type="hidden" name="GameId" value="@Model.Game.Id" />
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <textarea type="text" name="CommentText" maxlength="600" placeholder="Leave Comment ..."
+                                          style="width:100%; height:60px;"></textarea>
+                                <input type="submit" value="Send" class="site-btn btn-sm" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    @*//Get all comment elements*@
+        const comments = document.querySelectorAll('.comment');
+
+    @*//Add listeners to all reply buttons*@
+        comments.forEach(comment => {
+            const replyButton = comment.querySelector('.reply');
+
+            replyButton.addEventListener('click', (event) => {
+
+                event.preventDefault();
+
+                const allReplySections = document.querySelectorAll('.comment-reply-form');
+
+                allReplySections.forEach(replySection => {
+                    if (replySection !== replyForm) {
+                        replySection.style.display = 'none';
+                    }
+                });
+
+    @*//Hide the reply button  *@
+                    replyButton.style.display = 'none';
+
+                const replyForm = document.createElement('div');
+                replyForm.classList.add('comment-reply-form');
+
+                const formHtml = `
+            <form method="post" id="reply-form" enctype="multipart/form-data">
+
+            <div class="row">
+                <div class="col-md-12">
+                        <input type="hidden" name="GameId" value="@Model.Game.Id" />
+                        <input type="hidden" name="PostType" value="reply" />
+
+                <textarea name="CommentText" maxlength="600" placeholder="Your Reply"></textarea>
+                </div>
+                <div class="col-md-12">
+                <button type="submit" class="submit-button site-btn btn-sm ">Send</button>
+                <button type="button" class="cancel-reply site-btn btn-sm">Cancel</button>
+                </div>
+            </div>
+            </form>
+            `;
+
+                replyForm.innerHTML = formHtml;
+
+                comment.appendChild(replyForm);
+
+                const cancelButton = replyForm.querySelector('.cancel-reply');
+                cancelButton.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    replyButton.style.display = 'inline-block';
+                    replyForm.remove();
+                });
+
+                const replyFormElement = replyForm.querySelector('#reply-form');
+                replyFormElement.addEventListener('submit', (event) => {
+                    event.preventDefault();
+
+                    const formData = new FormData(replyFormElement);
+                    formData.append('ParentId', replyButton.id);
+                    console.log(replyButton.id);
+
+                    fetch('/Game/Details', { method: 'post', body: formData })
+                        .then(response => {
+                            console.log(response);
+                            window.location.reload();
+
+                        })
+                        .catch(error => {
+                            console.log(error);
+
+                        });
+
+
+                })
+            });
+
+    @*Check the nesting level*@
+            const nestingLevel = comment.querySelectorAll('.comment-reply').length;
+
+            if (nestingLevel >= 3) {
+                replyButton.style.display = 'none';
+            }
+
+        });
+</script>
+

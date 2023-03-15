@@ -1,8 +1,5 @@
 ﻿using GameStore.BLL.Interfaces;
 using GameStore.BLL.Models;
-using GameStore.BLL.Services;
-using GameStore.DAL.Entities;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GameStore.ViewModel
@@ -20,7 +17,6 @@ namespace GameStore.ViewModel
             foreach (var genre in gameGenres)
             {
                 genreList.Add(new SelectListItem(genre.Name, genre.Id.ToString()));
-                    //,this.GameGenres.Any(r=>r.GenreId == genre.Id)));
             }
         }
     }
