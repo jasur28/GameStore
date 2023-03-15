@@ -8,11 +8,14 @@
         <div class="col-lg-4 mx-auto">
             <h1 class="text-center mb-4">Login Page</h1>
             <form method="post" asp-action="LogIn" asp-controller="Account" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <p>
                     <input asp-for="Email" type="text" placeholder="Email" class="form-control" required />
+                    <span class="text-danger" asp-validation-for="Email"></span>
                 </p>
                 <p>
                     <input asp-for="Password" type="password" class="form-control" placeholder="Password" required />
+                    <span class="text-danger" asp-validation-for="Password"></span>
                 </p>
                 <p class="remember_me">
                     <label>
@@ -29,38 +32,3 @@
         </div>
     </div>
 </div>
-
-@*@model GameStore.ViewModel.LoginViewModel
-@{
-    ViewData["Title"] = "LogIn";
-}
-@Html.ValidationSummary(false, "", new { @class = "text-danger" })
-
-<form method="post" asp-action="LogIn" asp-controller="Account" enctype="multipart/form-data">
-
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-        <label asp-for="Email" class="control-label"></label>
-            <input asp-for="Email" type="text"  class="form-control" />
-            <span class="text-danger" asp-validation-for="Email"></span>
-        </div>
-
-         <div class="form-group">
-            <label asp-for="Password" class="control-label"></label>
-            <input asp-for="Password" type="password"  class="form-control" />
-            <span class="text-danger" asp-validation-for="Password"></span>
-        
-        </div>
-
-        <div>
-          <label asp-for="RememberMe"></label>
-          <input asp-for="RememberMe" />
-          <span asp-validation-for="RememberMe"></span>
-        </div>
-        
-        <div >
-          <button type="submit" class="btn btn-primary btn-lg">Login</button>
-        </div>
-
-</form>
-                           *@
