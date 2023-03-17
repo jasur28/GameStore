@@ -76,6 +76,7 @@ namespace GameStore.Controllers
         }
         public async Task<IActionResult> LogOut()
         {
+            HttpContext.Session.Remove("cart");
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
