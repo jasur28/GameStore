@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GameStore.DAL.Migrations
 {
-    public partial class init : Migration
+    public partial class InitDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -202,7 +202,8 @@ namespace GameStore.DAL.Migrations
                     CommentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -254,17 +255,17 @@ namespace GameStore.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "98540fd5-b401-4e57-ac82-8b9a965c081e", "ecb3910a-2966-48b2-bccc-a6adda9e7975", "User", "USER" });
+                values: new object[] { "fab4fac1-c546-41de-aebc-a14da6895711", "de8a28aa-3e79-414f-af3c-b2c1d076ffc2", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "adae435c-1aba-4146-8c11-41fbdd7ce9a1", "ba1f32f4-10c6-4cfa-addd-e907ebdd1e0d", "Manager", "MANAGER" });
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PhotoFileName", "ProfilePicture", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "217d97d9-8db6-48fa-a657-773b396a72d1", "admin@gamestore.com", false, "Admin", "Admin", false, null, "ADMIN@GAMESTORE.COM", "ADMIN", "AQAAAAEAACcQAAAAEHhCYT/q+LK+oDz1ZNUSdxscHsykU5JmhfmlpofTtu7yAk4NtYgQkOQ4kT1impKBzA==", null, false, null, null, "1b393882-4b12-435b-b5a3-838cc99faf80", false, "Admin" });
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "b51c1482-8aa5-46c9-bda2-3f25adaba1d8", "adb53d25-c690-47e0-8a85-1e9378d152ca", "Administrator", "ADMINISTRATOR" });
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "fab4fac1-c546-41de-aebc-a14da6895711", "b74ddd14-6340-4840-95c2-db12554843e5" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

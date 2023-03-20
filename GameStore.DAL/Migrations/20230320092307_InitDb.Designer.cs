@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameStore.DAL.Migrations
 {
     [DbContext(typeof(GameStoreDbContext))]
-    [Migration("20230316081142_addedCartEntity")]
-    partial class addedCartEntity
+    [Migration("20230320092307_InitDb")]
+    partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -101,6 +101,26 @@ namespace GameStore.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "b74ddd14-6340-4840-95c2-db12554843e5",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "217d97d9-8db6-48fa-a657-773b396a72d1",
+                            Email = "admin@gamestore.com",
+                            EmailConfirmed = false,
+                            FirstName = "Admin",
+                            LastName = "Admin",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GAMESTORE.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHhCYT/q+LK+oDz1ZNUSdxscHsykU5JmhfmlpofTtu7yAk4NtYgQkOQ4kT1impKBzA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "1b393882-4b12-435b-b5a3-838cc99faf80",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Comment", b =>
@@ -237,24 +257,10 @@ namespace GameStore.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "78df3fae-8163-4ee0-8277-5a8c6059834b",
-                            ConcurrencyStamp = "33d2943d-4f4b-494a-acc7-158105714182",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "9f19cadc-4c69-4054-a2b0-59896479951d",
-                            ConcurrencyStamp = "9aa33081-d6dd-49f0-a60f-a31d54d32730",
+                            Id = "fab4fac1-c546-41de-aebc-a14da6895711",
+                            ConcurrencyStamp = "de8a28aa-3e79-414f-af3c-b2c1d076ffc2",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "e6a207b6-e510-45a0-aafa-7cf450427f8c",
-                            ConcurrencyStamp = "61ca433d-035c-4053-aa68-2a8ddc5254e0",
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
                         });
                 });
 
@@ -343,6 +349,13 @@ namespace GameStore.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "b74ddd14-6340-4840-95c2-db12554843e5",
+                            RoleId = "fab4fac1-c546-41de-aebc-a14da6895711"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

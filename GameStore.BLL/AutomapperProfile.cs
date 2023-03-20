@@ -18,8 +18,7 @@ namespace GameStore.BLL
                 .ReverseMap();
             CreateMap<Comment, CommentModel>()
                 .ReverseMap();
-            CreateMap<Cart, CartModel>()
-                .ReverseMap();
+            
         }
     }
 }

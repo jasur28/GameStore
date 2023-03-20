@@ -2,10 +2,12 @@
 using GameStore.BLL.Models;
 using GameStore.DAL.Entities;
 using GameStore.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 
 namespace GameStore.Controllers
 {
@@ -26,6 +28,7 @@ namespace GameStore.Controllers
             _userManager = userManager;
         }
         //Get: Game/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             GameViewModel genres = new GameViewModel(genreService);

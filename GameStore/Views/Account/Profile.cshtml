@@ -38,25 +38,3 @@
     </div>
 
 </form>
-
-<table class="table table-bordered table-condensed">
-    <thead>
-        <tr>
-            <th>Comment Text</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var comments in Model.Comments)
-        {
-            <tr>
-                <td><p>@comments.CommentText</p></td>
-                <td>
-                    <a asp-controller="Comment" asp-action="RestoreComment" asp-route-id="@comments.Id" data-toggle="modal" data-target="@("#RestoreComment-"+comments.Id)">Restore</a>
-                    @await Html.PartialAsync("_RestoreCommentPartialView", comments)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-

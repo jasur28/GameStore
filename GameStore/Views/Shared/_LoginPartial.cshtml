@@ -13,7 +13,7 @@
             }
             @UserManager.GetUserAsync(User).Result.FirstName @UserManager.GetUserAsync(User).Result.LastName!
     </a>
-    <a asp-controller="Cart" asp-action="Buy">Basket:@ViewBag.count</a>
+    
     <form class="form-inline" asp-controller="Account" asp-action="Logout">
         <button type="submit" class="nav-link btn btn-link text-info">Logout</button>
     </form>
@@ -25,10 +25,3 @@ else
    <a asp-controller="Account" asp-action="Login">Login</a>  /  <a asp-controller="Account" asp-action="Register">Register</a>
    </div>
 }
-
-
-
-
-
-
-

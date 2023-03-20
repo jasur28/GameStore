@@ -1,5 +1,6 @@
 ﻿using GameStore.BLL.Interfaces;
 using GameStore.BLL.Models;
+using GameStore.BLL.Services;
 using GameStore.DAL.Entities;
 using GameStore.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -52,7 +53,7 @@ namespace GameStore.Controllers
             var game = _gameService.GetById(id);
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
 
-            if (cart == null) //no item in the cart
+            if (cart == null) 
             {
                 cart = new List<CartModel>();
                 cart.Add(new CartModel { Game = game, Quantity = 1 });
@@ -61,9 +62,9 @@ namespace GameStore.Controllers
             {
                 int index = cart.FindIndex(w => w.Game.Id == id);
 
-                if (index != -1) //if item already in the 
+                if (index != -1) 
                 {
-                    cart[index].Quantity++; //increment by 1
+                    cart[index].Quantity++; 
                 }
                 else
                 {
@@ -76,7 +77,7 @@ namespace GameStore.Controllers
         }
         public IActionResult Remove(Guid id)
         {
-            var game = _gameService.GetById(id);
+            //var game = _gameService.GetById(id);
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
 
             int index = cart.FindIndex(w => w.Game.Id == id);
@@ -87,11 +88,11 @@ namespace GameStore.Controllers
 
         public IActionResult Add(Guid id)
         {
-            var game = _gameService.GetById(id);
+            //var game = _gameService.GetById(id);
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
 
             int index = cart.FindIndex(w => w.Game.Id == id);
-            cart[index].Quantity++; //increment by 1
+            cart[index].Quantity++;
 
             HttpContext.Session.Set<List<CartModel>>("cart", cart);
             return RedirectToAction("Index");
@@ -99,21 +100,57 @@ namespace GameStore.Controllers
 
         public IActionResult Minus(Guid id)
         {
-            var game = _gameService.GetById(id);
+            //var game = _gameService.GetById(id);
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
         
             int index = cart.FindIndex(w => w.Game.Id == id);
-            if (cart[index].Quantity == 1) //last item of a product
+            if (cart[index].Quantity == 1) 
             {
-                cart.RemoveAt(index); //remove it
+                cart.RemoveAt(index); 
             }
             else
             {
-                cart[index].Quantity--; //reduce by 1
+                cart[index].Quantity--; 
             }
         
             HttpContext.Session.Set<List<CartModel>>("cart", cart);
             return RedirectToAction("Index");
         }
+
+        public IActionResult Order()
+        {
+            var user = _userManager.GetUserAsync(User).Result.Id;
+            var cart = HttpContext.Session.Get<List<CartModel>>("cart");
+            if (cart != null)
+            {
+                ViewBag.total = cart.Sum(s => s.Quantity * s.Game.Price);
+                ViewBag.count = cart.Count();
+            }
+            else
+            {
+                cart = new List<CartModel>();
+                ViewBag.total = 0;
+                ViewBag.count = 0;
+            }
+
+            return View(cart);
+        }
+
+        //public IActionResult CompletedOrder()
+        //{
+        //    var cart = HttpContext.Session.Get<List<CartModel>>("cart");
+        //    if (cart != null)
+        //    {
+        //        ViewBag.total = cart.Sum(s => s.Quantity * s.Game.Price);
+        //        ViewBag.count = cart.Count();
+        //    }
+        //    else
+        //    {
+        //        cart = new List<CartModel>();
+        //        ViewBag.total = 0;
+        //        ViewBag.count = 0;
+        //    }
+        //    return PartialView("_CompleteOrderPartialView",cart);
+        //}
     }
 }
