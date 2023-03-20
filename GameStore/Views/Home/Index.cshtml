@@ -1,4 +1,10 @@
 ﻿@model IEnumerable<GameStore.BLL.Models.GameModel>	
+@using GameStore.DAL.Entities
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
 <!-- Page info section -->
 <section class="page-info-section set-bg" data-setbg="img/page-top-bg/3.jpg">
 	<div class="pi-content">
