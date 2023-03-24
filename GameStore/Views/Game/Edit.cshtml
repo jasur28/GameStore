@@ -1,7 +1,4 @@
 ﻿@model GameStore.ViewModel.GameViewModel
-@{
-    
-}
 
 <div class="container">
     <h3 class="display-4">Edit game</h3>
@@ -39,7 +36,6 @@
             <input asp-for="Photo" class="form-control" type="file" accept="image/*" id="FileName" />
             <span asp-validation-for="Photo" class="text-danger"></span>
         </div>
-
 
         <div class="form-group">
             <input type="submit" value="Save" class="btn btn-primary" />

@@ -6,16 +6,28 @@
 @if (SignInManager.IsSignedIn(User))
 {
      <div class="user-panel">
-    <a class="nav-link text-dark" asp-controller="Account" asp-action="Profile" title="Welcome">
-        @UserManager.GetUserAsync(User).Result.FirstName @UserManager.GetUserAsync(User).Result.LastName!
-        @if (UserManager.GetUserAsync(User).Result.ProfilePicture != null)
-        {
-            <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfilePicture))">
-        }
-    </a>
-    <form class="form-inline" asp-controller="Account" asp-action="Logout">
-        <button type="submit" class="nav-link btn btn-link text-info">Logout</button>
-    </form>
+        <a class="nav-link text-dark" asp-controller="Account" asp-action="Profile" title="Welcome">
+            <div class="user-panel">
+                <div class="user-info">
+                    <span class="user-name">@UserManager.GetUserAsync(User).Result.FirstName @UserManager.GetUserAsync(User).Result.LastName</span>
+                </div>
+                @if (UserManager.GetUserAsync(User).Result.ProfilePicture != null)
+                {
+                    <div class="avatar-container">
+                        <img src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfilePicture))"  alt="User avatar" class="avatar rounded-circle">
+                    </div>
+                }
+            </div>
+        </a>
+    @*<a class="nav-link text-dark" asp-controller="Account" asp-action="Profile" title="Welcome">
+            @if (UserManager.GetUserAsync(User).Result.ProfilePicture != null)
+            {
+                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfilePicture))">
+            }
+            @UserManager.GetUserAsync(User).Result.FirstName @UserManager.GetUserAsync(User).Result.LastName!
+    </a>*@
+    
+    
     </div>
 }
 else
@@ -24,9 +36,3 @@ else
    <a asp-controller="Account" asp-action="Login">Login</a>  /  <a asp-controller="Account" asp-action="Register">Register</a>
    </div>
 }
-
-
-
-
-
-

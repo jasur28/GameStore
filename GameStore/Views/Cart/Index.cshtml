@@ -1,0 +1,56 @@
+﻿@model IEnumerable<GameStore.BLL.Models.CartModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            @if (ViewBag.total > 0)
+            {
+                <td colspan="5" style="text-align:right">
+                  Total:$ @ViewBag.total;
+                    
+                </td>
+                <td colspan="5" style="text-align:right">
+                    <a asp-controller="Cart" asp-action="Order" ><input type="button" class="btn btn-success" value="Procced" /></a>
+                </td>
+            }
+            else
+            {
+                <td colspan="5" style="text-align:right">
+                    Total:$ @ViewBag.total;
+                </td>
+            }
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Game.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Game.Photo)</th>
+            <th>@Html.DisplayNameFor(model => model.Game.Price)</th>
+            <th>@Html.DisplayNameFor(model => model.Quantity)</th>
+            <th>Sub-Total</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            
+               var base64 = Convert.ToBase64String(item.Game.Photo);
+               var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+        <tr>
+                @*<td>@item.Game.Id</td>*@
+                <td>@item.Game.Name</td>
+                <td><img src="@imgSrc" width="60" /></td>
+                <td>$@item.Game.Price</td>
+                <td>@item.Quantity</td>
+                <td>$@(item.Game.Price * item.Quantity)</td>
+            <td>
+                @Html.ActionLink("+", "Add", "Cart", new { id = item.Game.Id }, new { @class = "btn btn-success" })
+                @Html.ActionLink("-", "Minus", "Cart", new { id = item.Game.Id }, new { @class = "btn btn-danger" })
+            </td>
+            <td>
+                    @Html.ActionLink("Remove", "Remove", "Cart", new { id = item.Game.Id }, new { @class = "btn btn-danger" })
+            </td>
+        </tr>
+        }
+        
+    </tbody>
+</table>

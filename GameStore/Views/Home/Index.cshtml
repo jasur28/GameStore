@@ -1,30 +1,46 @@
 ﻿@model IEnumerable<GameStore.BLL.Models.GameModel>	
+@using GameStore.DAL.Entities
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
 <!-- Page info section -->
 <section class="page-info-section set-bg" data-setbg="img/page-top-bg/3.jpg">
 	<div class="pi-content">
 		<div class="container">
 			<div class="row">
 				<div class="col-xl-5 col-lg-6 text-white">
-					<h2>Game reviews</h2>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum.</p>
+					<h2>Game Store</h2>
+					<p>Here you will find all types of games.</p>
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
 <!-- Page info section -->
-<!-- Page section -->
-<section class="page-section review-page spad">
-	<div class="container">
-		<!--Button and Search filter -->
-		<a asp-controller="Game" asp-action="Create"><input type="button" class="btn btn-success" value="Add Game" /></a>
+<!--Button and Search filter -->
+<br />
+<div class="float-md-right" style="margin-top: 0px;">
+	<div class="col-md-6" style="margin-top: 0px;">
+		@*@if (ViewContext.HttpContext.User.IsInRole("Administrator"))
+		{
+			<a asp-controller="Game" asp-action="Create"><input type="button" class="btn btn-success" value="Add Game" style="margin-bottom: 0px;" /></a><br /><br />
+		}*@
+		
 		<form asp-controller="Home" asp-action="Index" method="get">
 			<p>
 				<input type="text" name="SearchString" />
 				<input type="submit" value="Search" />
 			</p>
 		</form>
+	</div>
+</div>
 		<!--Button and Search filter END-->
+<!-- Page section -->
+<section class="page-section review-page spad">
+	<div class="container">
+		
 		<div class="row">
 			@foreach(var p in Model)
 			{
@@ -42,16 +58,12 @@
 							<h4>@p.Name</h4>
 						
 							<p>@p.Description</p>
-
-						<button type="button" class="btn btn-success">Buy $@p.Price</button> 
+							<a asp-controller="Cart" asp-action="Buy" asp-route-id="@p.Id"><input type="button" class="btn btn-success" value="Buy $@p.Price" /></a>
 
 					</div>
 				</div>
 			</div>
 			}
-		</div>
-		<div class="text-center pt-4">
-			<button class="site-btn btn-sm">Load More</button>
 		</div>
 	</div>
 </section>

@@ -1,6 +1,7 @@
 ﻿using GameStore.BLL.Interfaces;
 using GameStore.DAL.Entities;
 using GameStore.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -74,12 +75,16 @@ namespace GameStore.Controllers
             ModelState.AddModelError("", "Login or Password Incorrect");
             return View(loginModel);
         }
+
+        [Authorize]
         public async Task<IActionResult> LogOut()
         {
+            HttpContext.Session.Remove("cart");
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize]
         public IActionResult Profile()
         {
             
@@ -97,6 +102,7 @@ namespace GameStore.Controllers
             };
             return View(profileViewModel);
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Profile(ProfileViewModel profileViewModel)

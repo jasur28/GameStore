@@ -2,61 +2,45 @@
 @{
     ViewData["Title"] = "Profile";
 }
-<form method="post" asp-action="Profile" asp-controller="Account" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="FirstName" class="control-label"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <form method="post" asp-action="Profile" asp-controller="Account" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Username" class="control-label"></label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ProfilePicture" class="control-label"></label>
+                    <input asp-for="ProfilePicture" class="form-control" type="file" accept="image/*" id="FileName" />
+                    <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+                <a asp-controller="Account" asp-action="Logout" class="btn btn-secondary">Logout</a>
+            </form>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="LastName" class="control-label"></label>
-        <input asp-for="LastName" class="form-control" />
-        <span asp-validation-for="LastName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Username" class="control-label"></label>
-        <input asp-for="Username" class="form-control" />
-        <span asp-validation-for="Username" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ProfilePicture" class="control-label"></label>
-        <input asp-for="ProfilePicture" class="form-control" type="file" accept="image/*" id="FileName" />
-        <span asp-validation-for="ProfilePicture" class="text-danger"></span>
-    </div>
-
-
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
-    </div>
-
-</form>
-
-<table class="table table-bordered table-condensed">
-    <thead>
-        <tr>
-            <th>Comment Text</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var comments in Model.Comments)
-        {
-            <tr>
-                <td><p>@comments.CommentText</p></td>
-                <td>
-                    <a asp-controller="Comment" asp-action="RestoreComment" asp-route-id="@comments.Id" data-toggle="modal" data-target="@("#RestoreComment-"+comments.Id)">Restore</a>
-                    @await Html.PartialAsync("_RestoreCommentPartialView", comments)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
+</div>

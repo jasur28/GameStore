@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameStore.DAL.Migrations
 {
     [DbContext(typeof(GameStoreDbContext))]
-    [Migration("20230313060848_init")]
-    partial class init
+    [Migration("20230320092307_InitDb")]
+    partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -101,6 +101,26 @@ namespace GameStore.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "b74ddd14-6340-4840-95c2-db12554843e5",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "217d97d9-8db6-48fa-a657-773b396a72d1",
+                            Email = "admin@gamestore.com",
+                            EmailConfirmed = false,
+                            FirstName = "Admin",
+                            LastName = "Admin",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GAMESTORE.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHhCYT/q+LK+oDz1ZNUSdxscHsykU5JmhfmlpofTtu7yAk4NtYgQkOQ4kT1impKBzA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "1b393882-4b12-435b-b5a3-838cc99faf80",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Comment", b =>
@@ -118,6 +138,9 @@ namespace GameStore.DAL.Migrations
 
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
@@ -234,24 +257,10 @@ namespace GameStore.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "98540fd5-b401-4e57-ac82-8b9a965c081e",
-                            ConcurrencyStamp = "ecb3910a-2966-48b2-bccc-a6adda9e7975",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "b51c1482-8aa5-46c9-bda2-3f25adaba1d8",
-                            ConcurrencyStamp = "adb53d25-c690-47e0-8a85-1e9378d152ca",
+                            Id = "fab4fac1-c546-41de-aebc-a14da6895711",
+                            ConcurrencyStamp = "de8a28aa-3e79-414f-af3c-b2c1d076ffc2",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "adae435c-1aba-4146-8c11-41fbdd7ce9a1",
-                            ConcurrencyStamp = "ba1f32f4-10c6-4cfa-addd-e907ebdd1e0d",
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
                         });
                 });
 
@@ -340,6 +349,13 @@ namespace GameStore.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "b74ddd14-6340-4840-95c2-db12554843e5",
+                            RoleId = "fab4fac1-c546-41de-aebc-a14da6895711"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

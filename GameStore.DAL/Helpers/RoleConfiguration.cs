@@ -16,18 +16,9 @@ namespace GameStore.DAL.Helpers
             builder.HasData(
             new IdentityRole
             {
-                Name = "User",
-                NormalizedName = "USER"
-            },
-            new IdentityRole
-            {
+                Id = "fab4fac1-c546-41de-aebc-a14da6895711",
                 Name = "Administrator",
                 NormalizedName = "ADMINISTRATOR"
-            },
-            new IdentityRole
-            {
-                Name = "Manager",
-                NormalizedName = "MANAGER"
             });
         }
     }
