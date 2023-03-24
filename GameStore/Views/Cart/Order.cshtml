@@ -1,4 +1,5 @@
-﻿@model IEnumerable<GameStore.BLL.Models.CartModel>
+﻿@using System.Globalization
+@model IEnumerable<GameStore.BLL.Models.CartModel>
 
 <div class="container">
     <div class="row justify-content-center-mt-5">
@@ -22,7 +23,10 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Payment type</label>
-                 <input type="text" id="cardtype" class="form-control" />
+                <select id="cardtype" name="Select payment type">
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                </select>
             </div>
             <div class="form-group">
                 <label class="control-label">Comments(optional)</label>
@@ -53,12 +57,6 @@
                         </div>
 
                         <div class="modal-body">
-
-                            <!-- Data passed is displayed
-                                in this part of the
-                                modal body -->
-                            <h6 id="modal_body"></h6>
-                            
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -78,22 +76,22 @@
             var phone = $('#phone').val();
             var type = $('#cardtype').val();
             var comment = $('#comments').val();
-            //var gamesCount = @ViewBag.count;
-            //var totalSum = 300.0;
+            var gamesCount = @ViewBag.count;
+            var totalSum = '@ViewBag.total';
 
             
-            var str = "You Have Entered "
-                + "First Name: " + fname 
-                + " Last Name: " + lname
-                + " Email: " + email
-                + " Phone: " + phone
-                + " Payment type: " + type
-                + " Comment: " + comment;
-                //+ "Games: " + gamesCount
-                //+ "Total sum: " + totalSum;
+            var str = "You Have Entered: "
+                + "\t First Name: " + fname 
+                + "\n Last Name: " + lname
+                + "\n Email: " + email
+                + "\n Phone: " + phone
+                + "\n Payment type: " + type
+                + "\n Comment: " + comment
+                + "\n Games: " + gamesCount
+                + "\n Total sum: " + totalSum;
 
             var childHtml = "<h6>" + str + "</h6>";
 
-            $('#modal_body').html(childHtml);
+            $('.modal-body').html(childHtml);
         });
 </script>

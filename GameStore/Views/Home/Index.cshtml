@@ -23,10 +23,10 @@
 <br />
 <div class="float-md-right" style="margin-top: 0px;">
 	<div class="col-md-6" style="margin-top: 0px;">
-		@if (ViewContext.HttpContext.User.IsInRole("Administrator"))
+		@*@if (ViewContext.HttpContext.User.IsInRole("Administrator"))
 		{
 			<a asp-controller="Game" asp-action="Create"><input type="button" class="btn btn-success" value="Add Game" style="margin-bottom: 0px;" /></a><br /><br />
-		}
+		}*@
 		
 		<form asp-controller="Home" asp-action="Index" method="get">
 			<p>
@@ -58,9 +58,7 @@
 							<h4>@p.Name</h4>
 						
 							<p>@p.Description</p>
-							@*@Html.ActionLink("Buy $"+@p.Price, "Buy", "Cart", new { id = p.Id }, new { @class = "btn btn-success" })*@
 							<a asp-controller="Cart" asp-action="Buy" asp-route-id="@p.Id"><input type="button" class="btn btn-success" value="Buy $@p.Price" /></a>
-						@*<button type="button" class="btn btn-success">Buy $@p.Price</button> *@
 
 					</div>
 				</div>

@@ -48,9 +48,10 @@ namespace GameStore.DAL.Data
                 .WithMany(x => x.GameComments)
                 .HasForeignKey(x => x.GameId);
 
-            base.OnModelCreating(modelBuilder);
+            
             this.SeedUsers(modelBuilder);
             this.SeedUserRoles(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
 
         private void SeedUsers(ModelBuilder builder)  

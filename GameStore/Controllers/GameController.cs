@@ -104,6 +104,12 @@ namespace GameStore.Controllers
         [HttpPost]
         public IActionResult Details(CommentViewModel commentViewModel)
         {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             CommentModel model = new CommentModel();
             model.Id = Guid.NewGuid();
             model.GameId = commentViewModel.GameId;
