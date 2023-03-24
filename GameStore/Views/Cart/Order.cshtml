@@ -72,23 +72,28 @@
 
 <script type="text/javascript">
         $('#submit').on('click',function () {
-            //var fname = $('#fname').val();
-            //var lname = $('#lname').val();
-            //var email = $('#email').val();
-            //var phone = $('#phone').val();
-            //var type = $('#cardtype').val();
-            //var comment = $('#comments').val();
-            var gamesCount = @ViewBag.count;
-            var totalSum = @ViewBag.total;
-            //var str = "You Have Entered "
-            //    + "First Name: " + fname 
-            //    + " Last Name: " + lname
-            //    + " Email: " + email
-            //    + " Phone: " + phone
-            //    + " Payment type: " + type
-            //    + " Comment: " + comment
-                 "Games: " + gamesCount
-                + "Total sum: " + totalSum;
-            $('#modal_body').html(str);
+            var fname = $('#fname').val();
+            var lname = $('#lname').val();
+            var email = $('#email').val();
+            var phone = $('#phone').val();
+            var type = $('#cardtype').val();
+            var comment = $('#comments').val();
+            //var gamesCount = @ViewBag.count;
+            //var totalSum = 300.0;
+
+            
+            var str = "You Have Entered "
+                + "First Name: " + fname 
+                + " Last Name: " + lname
+                + " Email: " + email
+                + " Phone: " + phone
+                + " Payment type: " + type
+                + " Comment: " + comment;
+                //+ "Games: " + gamesCount
+                //+ "Total sum: " + totalSum;
+
+            var childHtml = "<h6>" + str + "</h6>";
+
+            $('#modal_body').html(childHtml);
         });
 </script>

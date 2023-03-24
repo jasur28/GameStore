@@ -21,9 +21,13 @@
 <!-- Page info section -->
 <!--Button and Search filter -->
 <br />
-<div class="container">
-	<div class="col-md-6">
-		<a asp-controller="Game" asp-action="Create"><input type="button" class="btn btn-success" value="Add Game" /></a>
+<div class="float-md-right" style="margin-top: 0px;">
+	<div class="col-md-6" style="margin-top: 0px;">
+		@if (ViewContext.HttpContext.User.IsInRole("Administrator"))
+		{
+			<a asp-controller="Game" asp-action="Create"><input type="button" class="btn btn-success" value="Add Game" style="margin-bottom: 0px;" /></a><br /><br />
+		}
+		
 		<form asp-controller="Home" asp-action="Index" method="get">
 			<p>
 				<input type="text" name="SearchString" />

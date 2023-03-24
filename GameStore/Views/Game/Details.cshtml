@@ -42,6 +42,13 @@
                     }
                     <h3>@Model.Game.Name</h3>
                     <p>@Model.Game.Description</p>
+                    @if (ViewContext.HttpContext.User.IsInRole("Administrator"))
+		            {
+                    <div>
+					<a asp-controller="Game" asp-action="Edit" asp-route-id="@Model.GameId"><input type="button" class="btn btn-warning" value="Edit Game" /></a>
+                            <a asp-controller="Game" asp-action="Delete" asp-route-id="@Model.GameId"><input type="button" class="btn btn-danger" value="Delete Game" /></a>
+				    </div>
+                    }
                 </div>
                 <!--Comment section-->
                 <div class="comment-warp">
