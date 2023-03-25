@@ -8,7 +8,7 @@ namespace GameStore.DAL.Data
 {
     public class GameStoreDbContext : IdentityDbContext<ApplicationUser>
     {
-        public GameStoreDbContext(DbContextOptions<GameStoreDbContext> options): base(options)
+        public GameStoreDbContext(DbContextOptions<GameStoreDbContext> options) : base(options)
         {
 
         }
@@ -21,56 +21,36 @@ namespace GameStore.DAL.Data
         {
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new GenresListConfiguration());
-            
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+
             //GameGenre
             modelBuilder.Entity<GameGenre>().HasKey(gg => new { gg.GameId, gg.GenreId });
             modelBuilder.Entity<GameGenre>()
                 .HasOne(gg => gg.Game)
-                .WithMany(gg=>gg.GameGenres).HasForeignKey(k=>k.GameId);
+                .WithMany(gg => gg.GameGenres).HasForeignKey(k => k.GameId);
             modelBuilder.Entity<GameGenre>()
                 .HasOne(gg => gg.Genre)
                 .WithMany(gg => gg.GameGenres).HasForeignKey(k => k.GenreId);
 
             modelBuilder.Entity<Comment>()
-                .HasOne(x=>x.Parent)
-                .WithMany(x=>x.Children)
-                .HasForeignKey(x=>x.ParentId)
+                .HasOne(x => x.Parent)
+                .WithMany(x => x.Children)
+                .HasForeignKey(x => x.ParentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Comment>()
                 .HasOne(x => x.User)
                 .WithMany(x => x.UserComments)
                 .HasForeignKey(x => x.UserId);
-                
+
 
             modelBuilder.Entity<Comment>()
                 .HasOne(x => x.Game)
                 .WithMany(x => x.GameComments)
                 .HasForeignKey(x => x.GameId);
 
-            
-            this.SeedUsers(modelBuilder);
             this.SeedUserRoles(modelBuilder);
             base.OnModelCreating(modelBuilder);
-        }
-
-        private void SeedUsers(ModelBuilder builder)  
-        {  
-            ApplicationUser user = new ApplicationUser()  
-            {  
-                Id = "b74ddd14-6340-4840-95c2-db12554843e5",
-                FirstName="Admin",
-                LastName = "Admin",
-                UserName = "Admin",  
-                Email = "admin@gamestore.com",
-                NormalizedEmail= "ADMIN@GAMESTORE.COM",
-                NormalizedUserName="ADMIN"
-            };  
-  
-            PasswordHasher<ApplicationUser> passwordHasher = new PasswordHasher<ApplicationUser>();
-            user.PasswordHash = passwordHasher.HashPassword(user, "Jasur@295");  
-  
-            builder.Entity<ApplicationUser>().HasData(user);  
         }
 
         private void SeedUserRoles(ModelBuilder builder)
@@ -78,9 +58,9 @@ namespace GameStore.DAL.Data
             builder.Entity<IdentityUserRole<string>>()
                 .HasData(new IdentityUserRole<string>
                 {
-                    RoleId = "fab4fac1-c546-41de-aebc-a14da6895711", UserId = "b74ddd14-6340-4840-95c2-db12554843e5" 
+                    RoleId = "fab4fac1-c546-41de-aebc-a14da6895711",
+                    UserId = "b74ddd14-6340-4840-95c2-db12554843e5"
                 });
         }
-
     }
 }

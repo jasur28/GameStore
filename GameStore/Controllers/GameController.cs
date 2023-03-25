@@ -5,34 +5,37 @@ using GameStore.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Storage;
-using System.Data;
+using System.IO;
+using System.Text;
+using System;
 
 namespace GameStore.Controllers
 {
     public class GameController : Controller
     {
-        private readonly IGameService gameService;
-        private readonly IGenreService genreService;
-        private readonly ICommentService commentService;
+        private readonly IGameService _gameService;
+        private readonly IGenreService _genreService;
+        private readonly ICommentService _commentService;
         private readonly UserManager<ApplicationUser> _userManager;
         public GameController(IGameService gameService,
             IGenreService genreService,
             ICommentService commentService,
             UserManager<ApplicationUser> userManager)
         {
-            this.gameService = gameService;
-            this.genreService = genreService;
-            this.commentService = commentService;
+            _gameService = gameService;
+            _genreService = genreService;
+            _commentService = commentService;
             _userManager = userManager;
         }
+
         //Get: Game/Create
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
-            GameViewModel genres = new GameViewModel(genreService);
+            GameViewModel genres = new GameViewModel(_genreService);
+
             ViewBag.Genres = genres.genreList;
+
             return View();
         }
 
@@ -45,10 +48,14 @@ namespace GameStore.Controllers
             item.Id = Guid.NewGuid();
 
             //Select Genres
-            GameViewModel genres = new GameViewModel(genreService);
+            GameViewModel genres = new GameViewModel(_genreService);
+
             ViewBag.Genres = genres.genreList;
+
             string[] gameGenres = Request.Form["listGenres"].ToString().Split(",");
+
             List<GameGenreModel> gameGenreModel = new List<GameGenreModel>();
+
             foreach (string id in gameGenres)
             {
                 gameGenreModel.Add(new GameGenreModel
@@ -77,13 +84,20 @@ namespace GameStore.Controllers
             }
             else
             {
-                //Default data FileStream
+                var fileStream = System.IO.File.Open("wwwroot/img/no-image.png",FileMode.Open);
+
+                var memoryStream = new MemoryStream();
+
+                fileStream.CopyTo(memoryStream);
+
+                item.Photo = memoryStream.ToArray();
+                item.PhotoFileName = fileStream.Name;
             }
 
             ModelState.ClearValidationState(nameof(GameModel));
             if (!TryValidateModel(item, nameof(GameModel)))
             {
-                gameService.Add(item);
+                _gameService.Add(item);
                 TempData["Success"] = "The game has been created!";
                 return RedirectToAction("Index", "Home");
             }
@@ -93,18 +107,22 @@ namespace GameStore.Controllers
         // Get: Game/Details/Id
         public IActionResult Details(Guid id)
         {
-            var game = gameService.GetById(id);
+            var game = _gameService.GetById(id);
+
             CommentViewModel result = new CommentViewModel();
+
             result.Game = game;
-            result.Comments = commentService.GetAllByGameId(id).ToList();
+            result.Comments = _commentService.GetAllByGameId(id).ToList();
 
             return View(result);
         }
+
         // Post: Game/Details/Id
         [HttpPost]
         public IActionResult Details(CommentViewModel commentViewModel)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
+
             if (userId == null)
             {
                 return RedirectToAction("Login", "Account");
@@ -116,11 +134,13 @@ namespace GameStore.Controllers
             model.UserId = _userManager.GetUserAsync(User).Result.Id;
             model.CommentText = commentViewModel.CommentText;
             model.CommentDate = DateTime.Now;
+
             if (commentViewModel.PostType == "reply")
             {
                 model.ParentId = commentViewModel.ParentId;
             }
-            commentService.Add(model);
+
+            _commentService.Add(model);
 
             return RedirectToAction("Details", new { id = commentViewModel.GameId }); 
         }
@@ -128,10 +148,10 @@ namespace GameStore.Controllers
         // GET /Game/Edit/Id
         public IActionResult Edit(Guid id)
         {
-            GameViewModel genres = new GameViewModel(genreService);
+            GameViewModel genres = new GameViewModel(_genreService);
             ViewBag.Genres = genres.genreList;
 
-            var item = gameService.GetById(id);
+            var item = _gameService.GetById(id);
             genres.Id = item.Id;
             genres.Name = item.Name;
             genres.Description = item.Description;
@@ -139,6 +159,7 @@ namespace GameStore.Controllers
             genres.GameGenres = item.GameGenres;
             genres.Photo = item.Photo;
             genres.PhotoFileName = item.PhotoFileName;
+
             if (genres == null)
             {
                 return NotFound();
@@ -154,6 +175,7 @@ namespace GameStore.Controllers
         {
             
             var contextForm = Request.Form.Files;
+
             if (contextForm != null && contextForm.Count > 0)
             {
                 var formFile = contextForm[0];
@@ -168,12 +190,26 @@ namespace GameStore.Controllers
                     }
                 }
             }
+            else
+            {
+                var fileStream = System.IO.File.Open("wwwroot/img/no-image.png", FileMode.Open);
+
+                var memoryStream = new MemoryStream();
+
+                fileStream.CopyTo(memoryStream);
+
+                item.Photo = memoryStream.ToArray();
+                item.PhotoFileName = fileStream.Name;
+            }
 
             //Select Genres
-            GameViewModel genres = new GameViewModel(genreService);
+            GameViewModel genres = new GameViewModel(_genreService);
             ViewBag.Genres = genres.genreList;
+
             string[] gameGenres = Request.Form["listGenres"].ToString().Split(",");
+
             List<GameGenreModel> gameGenreModel = new List<GameGenreModel>();
+
             foreach (string id in gameGenres)
             {
                 gameGenreModel.Add(new GameGenreModel
@@ -182,16 +218,17 @@ namespace GameStore.Controllers
                     GenreId = new Guid(id)
                 });
             }
+
             item.GameGenres = gameGenreModel;
             
             ModelState.ClearValidationState(nameof(GameModel));
+
             if (!TryValidateModel(item, nameof(GameModel)))
             {
-                gameService.Update(item);
+                _gameService.Update(item);
                 TempData["Success"] = "The game has been updated!";
                 return RedirectToAction("Index", "Home");
             }
-
             
             return View(item);
         }
@@ -199,14 +236,15 @@ namespace GameStore.Controllers
         // GET /Game/Delete/ID
         public IActionResult Delete(Guid id)
         {
-            var item = gameService.GetById(id);
+            var item = _gameService.GetById(id);
+
             if (item == null)
             {
                 TempData["Error"] = "The game does not exist!";
             }
             else
             {
-                gameService.Delete(item.Id);
+                _gameService.Delete(item.Id);
                 TempData["Success"] = "The game has been deleted!";
             }
 

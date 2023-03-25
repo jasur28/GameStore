@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameStore.DAL.Migrations
 {
     [DbContext(typeof(GameStoreDbContext))]
-    [Migration("20230320115909_AddedConfigurationForGenre")]
-    partial class AddedConfigurationForGenre
+    [Migration("20230325045542_InitDb")]
+    partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -107,7 +107,7 @@ namespace GameStore.DAL.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "780e2e9a-eaba-4e94-ab0f-2371cfc37f0d",
+                            ConcurrencyStamp = "49742470-9e2e-4cdc-a207-e9064f81b10f",
                             Email = "admin@gamestore.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -115,9 +115,9 @@ namespace GameStore.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GAMESTORE.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDd+IDcRMvdDpkR6+7YvDxlJBj/IrXB7dzUIyfnaXqX9T6MAvSVfofmYYLyrKjR+ew==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECvtF9LLxAu/2nOaQkyuKZqLvSskSV0GpkoXM9w4XlXzQu6PyWhkudC5VLWAEnC6mQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1e786091-79bc-4de4-bf68-09b5c1a66475",
+                            SecurityStamp = "c9de5227-ffdf-48fa-a243-4b788e98c259",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
@@ -230,42 +230,42 @@ namespace GameStore.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1b25d3b5-ffcf-4879-8b00-3a3f96edfbee"),
+                            Id = new Guid("991771ab-46c5-4502-9072-316487e7f3ab"),
                             Name = "Strategy"
                         },
                         new
                         {
-                            Id = new Guid("e14e7ab7-6589-4a0e-8ff9-17db4aafd2a0"),
+                            Id = new Guid("6c10afa8-8f10-4721-850c-346d00119f42"),
                             Name = "Rpg"
                         },
                         new
                         {
-                            Id = new Guid("c335344e-cf89-4b73-9931-26e4e890000b"),
+                            Id = new Guid("0894a9cf-fb1d-4283-a6cb-947084b7931f"),
                             Name = "Sports"
                         },
                         new
                         {
-                            Id = new Guid("3a5de2ae-583c-41e5-b55d-9179f46cbbeb"),
+                            Id = new Guid("f40c7f2d-ae99-436c-b458-09e470ca3b89"),
                             Name = "Races"
                         },
                         new
                         {
-                            Id = new Guid("be8bfcc4-5b13-42ec-9fe1-2e0c747e7141"),
+                            Id = new Guid("db472978-2ad0-430d-92cf-e7b50a13bab8"),
                             Name = "Action"
                         },
                         new
                         {
-                            Id = new Guid("63f2c980-4bce-4858-a7e3-28aeb4eb81d6"),
+                            Id = new Guid("eb343457-3d95-4c90-ac00-bb08e521dacb"),
                             Name = "Adventure"
                         },
                         new
                         {
-                            Id = new Guid("83ec58f5-0b16-4ed3-9931-a20c2600867c"),
+                            Id = new Guid("e91a6cf8-10ec-483b-aae0-ed518fa3a688"),
                             Name = "Puzzle & Skill"
                         },
                         new
                         {
-                            Id = new Guid("6e0dba34-f443-462f-9c3a-fd15d496f739"),
+                            Id = new Guid("f4c13eec-e88e-42c7-a0b8-eaac6c098fba"),
                             Name = "Others"
                         });
                 });
@@ -300,7 +300,7 @@ namespace GameStore.DAL.Migrations
                         new
                         {
                             Id = "fab4fac1-c546-41de-aebc-a14da6895711",
-                            ConcurrencyStamp = "dea96f0c-c812-47bc-b90e-33f70e6f54ba",
+                            ConcurrencyStamp = "dabde615-9baf-4b7a-83c7-49b85f1d9953",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

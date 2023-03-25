@@ -58,6 +58,3 @@ namespace GameStore.DAL.Helpers
         }
     }
 }
-/*public string Name { get; set; }
-        public Guid? ParenId { get; set; }
-        public IEnumerable<Genre> SubGenres { get; set; }*/
