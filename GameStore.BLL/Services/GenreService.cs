@@ -2,6 +2,7 @@
 using GameStore.BLL.Interfaces;
 using GameStore.BLL.Models;
 using GameStore.DAL.Interfaces;
+// TODO: there are a lot of unused namespaces, please keep it clean
 using System;
 using System.Collections.Generic;
 using System.Linq;

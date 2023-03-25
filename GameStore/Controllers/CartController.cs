@@ -11,6 +11,7 @@ namespace GameStore.Controllers
     {
         private readonly IGameService _gameService;
         private readonly UserManager<ApplicationUser> _userManager;
+        // TODO: same here, unused ones reduce the readability and maintenance of your code for other developers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
@@ -46,6 +47,11 @@ namespace GameStore.Controllers
 
             if (cart == null) 
             {
+                // TODO: the best practice in this case to use initializer 
+                // cart = new List<CartModel>
+                // {
+                //      new CartModel { Game = game, Quantity = 1 }
+                // };
                 cart = new List<CartModel>();
                 cart.Add(new CartModel { Game = game, Quantity = 1 });
             }
@@ -96,6 +102,25 @@ namespace GameStore.Controllers
 
         public IActionResult Minus(Guid id)
         {
+            // TODO: 1, 2, 3
+
+            // 1) if you return the List please name variables in the plural, since the slightly ambiguous "cart"
+
+            // 2) it seems not entirely logical to create a new CardModel for each game
+            // instead you could create one CardModel with Dictionary<GameModel, int> to locate here Quantity
+            // and game or even just Dictionary<Guid, int> for GameId and Quantity not to overload session memory
+
+            // 3) try to use LINQ expressions and simplify this logic 
+            // for instance:
+            // var cart = carts.FirstOrDefault(x => x.Game.Id == id);
+            // if (cart is null) return View("Index");
+            //
+            // if (cart.Quantity == 1)
+            //   cart.Remove(t);
+            // else
+            //   cart.Quantity--;
+            // but consider the second point in this case
+
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
         
             int index = cart.FindIndex(w => w.Game.Id == id);
@@ -116,6 +141,8 @@ namespace GameStore.Controllers
 
         public IActionResult Order()
         {
+            // TODO: how is the purpose of the unused 'user' field here?
+            // If you don't use it, then delete.
             var user = _userManager.GetUserAsync(User).Result.Id;
 
             var cart = GetCartFromSession();
@@ -125,6 +152,7 @@ namespace GameStore.Controllers
 
         public List<CartModel> GetCartFromSession()
         {
+            // TODO: see above 
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
 
             if (cart != null)
