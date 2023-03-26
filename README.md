@@ -44,7 +44,7 @@ The BLL will have a reference to the DAL. BLL manages the Input and output betwe
 * GameService.cs
 * GenreService.cs
 ### Presentation Layer
-It is a web apllication on asp.net mvc core 6.
+It is a web apllication on asp.net mvc core 6, bootstrap, jquery, javascript, css and html
 	
 ## Setup
 
