@@ -4,7 +4,7 @@ A simple game store web application in asp.net core 6
 
 ## Table of contents
 * [General info](#general-info)
-* [Technologies](#technologies)
+* [Tech Stack](#technologies)
 * [Application architecture](#application-architecture)
 * [Setup](#setup)
 * [Unit tests](#unit-tests)
@@ -14,9 +14,10 @@ A simple game store web application in asp.net core 6
 ## General info
 The goal of the project is to learn how to develop a commercial application.
 	
-## Technologies
+## Tech Stack
 Project is created with:
-* Windows version: 10 64bit
+* ASP.Net Core 6
+* EF core 6
 * Visual Studio version: 2022
 * .Net Core version: 6
 * MSSqlserver 2019
