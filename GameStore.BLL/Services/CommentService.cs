@@ -12,19 +12,17 @@ using System.Threading.Tasks;
 
 namespace GameStore.BLL.Services
 {
-    // TODO: remove double inheritance from ICrud since there is in ICommentService
-    public class CommentService : ICrud<CommentModel>, ICommentService
+    public class CommentService : ICommentService
 	{
-        // TODO: to follow best practices use underscore for private fields like this '_unitOfWork'
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IMapper mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public CommentService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             // TODO: and when you will use underscore for
             // private fields there won't be need to use 'this' in this case
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         // TODO: since it's supposed to be an asynchronous method, use keyword "async"
@@ -35,15 +33,15 @@ namespace GameStore.BLL.Services
         // instead of 'void' return 'Task, Task<Result>, ValueTask, ValueTask<Result>'
         public void Add(CommentModel model)
 		{
-            var item = mapper.Map<Comment>(model);
-            unitOfWork.CommentRepository.Add(item);
+            var item = _mapper.Map<Comment>(model);
+            _unitOfWork.CommentRepository.Add(item);
             // TODO: use 'await' operator in asynchronous methods since this can cause problems
             // the async operation will start executing on a separate thread,
             // but the calling thread will continue executing the next statement immediately
             // without waiting for the async operation to complete
             // await unitOfWork.SaveAsync();
             // the same problem is almost everywhere, correct it please
-            unitOfWork.SaveAsync();
+            _unitOfWork.SaveAsync();
 		}
         // result should look like this:
         //public async Task Add(CommentModel model)
@@ -58,36 +56,31 @@ namespace GameStore.BLL.Services
 
         public void Delete(Guid id)
 		{
-            // TODO: what does it mean? 
-            // get in the habit of not leaving unnecessary comments in your code
-
-            //unitOfWork.CommentRepository.DeleteById(id);
-            //unitOfWork.SaveAsync();
             throw new NotImplementedException();
         }
 
 		public IEnumerable<CommentModel> GetAll()
 		{
-            var items = unitOfWork.CommentRepository.GetAll();
-            return mapper.Map<IEnumerable<CommentModel>>(items);
+            var items = _unitOfWork.CommentRepository.GetAll();
+            return _mapper.Map<IEnumerable<CommentModel>>(items);
         }
 
 		public IEnumerable<CommentModel> GetAllByGameId(Guid id)
 		{
-			var items = unitOfWork.CommentRepository.GetAllByGameId(id);
-            return mapper.Map<IEnumerable<CommentModel>>(items);
+			var items = _unitOfWork.CommentRepository.GetAllByGameId(id);
+            return _mapper.Map<IEnumerable<CommentModel>>(items);
         }
 
 		public CommentModel GetById(Guid id)
 		{
-            var item = unitOfWork.CommentRepository.GetById(id);
-            return mapper.Map<CommentModel>(item);
+            var item = _unitOfWork.CommentRepository.GetById(id);
+            return _mapper.Map<CommentModel>(item);
         }
 
 		public void Update(CommentModel model)
 		{
-            unitOfWork.CommentRepository.Update(mapper.Map<Comment>(model));
-            unitOfWork.SaveAsync();
+            _unitOfWork.CommentRepository.Update(_mapper.Map<Comment>(model));
+            _unitOfWork.SaveAsync();
         }
 	}
 }

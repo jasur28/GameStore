@@ -11,13 +11,12 @@ namespace GameStore.Controllers
     {
         private readonly IGameService _gameService;
         private readonly UserManager<ApplicationUser> _userManager;
-        // TODO: same here, unused ones reduce the readability and maintenance of your code for other developers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public CartController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager, IGameService gameService )
+            RoleManager<IdentityRole> roleManager, IGameService gameService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -36,7 +35,7 @@ namespace GameStore.Controllers
         {
             var userId = _userManager.GetUserId(HttpContext.User);
 
-            if(userId==null)
+            if (userId == null)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -45,37 +44,35 @@ namespace GameStore.Controllers
 
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
 
-            if (cart == null) 
+            if (cart == null)
             {
-                // TODO: the best practice in this case to use initializer 
-                // cart = new List<CartModel>
-                // {
-                //      new CartModel { Game = game, Quantity = 1 }
-                // };
-                cart = new List<CartModel>();
-                cart.Add(new CartModel { Game = game, Quantity = 1 });
+                cart = new List<CartModel>
+                {
+                      new CartModel { Game = game, Quantity = 0 }
+                };
+
             }
             else
             {
                 int index = cart.FindIndex(w => w.Game.Id == id);
 
-                if (index != -1) 
+                if (index != -1)
                 {
-                    cart[index].Quantity++; 
+                    cart[index].Quantity++;
                 }
                 else
                 {
                     cart.Add(new CartModel { Game = game, Quantity = 1 });
                 }
             }
-        
+
             HttpContext.Session.Set<List<CartModel>>("cart", cart);
 
             return RedirectToAction("Index");
         }
         public IActionResult Remove(Guid id)
         {
-            
+
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
 
             int index = cart.FindIndex(w => w.Game.Id == id);
@@ -122,18 +119,18 @@ namespace GameStore.Controllers
             // but consider the second point in this case
 
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
-        
+
             int index = cart.FindIndex(w => w.Game.Id == id);
 
-            if (cart[index].Quantity == 1) 
+            if (cart[index].Quantity == 1)
             {
-                cart.RemoveAt(index); 
+                cart.RemoveAt(index);
             }
             else
             {
-                cart[index].Quantity--; 
+                cart[index].Quantity--;
             }
-        
+
             HttpContext.Session.Set<List<CartModel>>("cart", cart);
 
             return RedirectToAction("Index");
@@ -141,10 +138,6 @@ namespace GameStore.Controllers
 
         public IActionResult Order()
         {
-            // TODO: how is the purpose of the unused 'user' field here?
-            // If you don't use it, then delete.
-            var user = _userManager.GetUserAsync(User).Result.Id;
-
             var cart = GetCartFromSession();
 
             return View(cart);
@@ -152,7 +145,6 @@ namespace GameStore.Controllers
 
         public List<CartModel> GetCartFromSession()
         {
-            // TODO: see above 
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
 
             if (cart != null)
