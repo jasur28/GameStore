@@ -18,8 +18,8 @@ The goal of the project is to learn how to develop a commercial application.
 Project is created with:
 * ASP.Net Core 6
 * EF core 6
-* Visual Studio version: 2022
-* .Net Core version: 6
+* Visual Studio 2022
+* .Net Core 6
 * MSSqlserver 2019
 
 ## Application architecture
@@ -47,13 +47,17 @@ The BLL will have a reference to the DAL. BLL manages the Input and output betwe
 It is a web apllication on asp.net mvc core 6, bootstrap, jquery, javascript, css and html
 	
 ## Setup
-
+Download source code or clone using Visual Studio. In the appsettings.json file change to your connection string:
+"ConnectionStrings": {
+    "Gamestore": "Your settings"
+  }
+Then run application. Credentials for admin user is:
+login: admin@gamestore.com
+password: Admin@295
 ## Unit Tests
 
 ## Not implemented
 * Unit Tests
-* Setup
-
 
 ## Conclusion
 In this project, i have learned:
