@@ -2,23 +2,18 @@
 using GameStore.BLL.Interfaces;
 using GameStore.BLL.Models;
 using GameStore.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameStore.BLL.Services
 {
-    public class GenreService : ICrud<GenreModel>, IGenreService
+    public class GenreService : IGenreService
     {
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IMapper mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public GenreService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public void Add(GenreModel model)
@@ -33,8 +28,8 @@ namespace GameStore.BLL.Services
 
         public IEnumerable<GenreModel> GetAll()
         {
-            var items = unitOfWork.GenreRepository.GetAll();
-            return mapper.Map<IEnumerable<GenreModel>>(items);
+            var items = _unitOfWork.GenreRepository.GetAll();
+            return _mapper.Map<IEnumerable<GenreModel>>(items);
         }
 
         public GenreModel GetById(Guid id)

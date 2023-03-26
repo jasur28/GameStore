@@ -12,52 +12,75 @@ using System.Threading.Tasks;
 
 namespace GameStore.BLL.Services
 {
-	public class CommentService : ICrud<CommentModel>, ICommentService
+    public class CommentService : ICommentService
 	{
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IMapper mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public CommentService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
+            // TODO: and when you will use underscore for
+            // private fields there won't be need to use 'this' in this case
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
+
+        // TODO: since it's supposed to be an asynchronous method, use keyword "async"
+        // and remember that returning void in async methods is very bad practice.
+        // when an asynchronous method returns void:
+        // 1) it means that the method doesn't produce a result that can be awaited or consumed by the caller.
+        // 2) it can make it difficult to handle exceptions 
+        // instead of 'void' return 'Task, Task<Result>, ValueTask, ValueTask<Result>'
         public void Add(CommentModel model)
 		{
-            var item = mapper.Map<Comment>(model);
-            unitOfWork.CommentRepository.Add(item);
-            unitOfWork.SaveAsync();
+            var item = _mapper.Map<Comment>(model);
+            _unitOfWork.CommentRepository.Add(item);
+            // TODO: use 'await' operator in asynchronous methods since this can cause problems
+            // the async operation will start executing on a separate thread,
+            // but the calling thread will continue executing the next statement immediately
+            // without waiting for the async operation to complete
+            // await unitOfWork.SaveAsync();
+            // the same problem is almost everywhere, correct it please
+            _unitOfWork.SaveAsync();
 		}
+        // result should look like this:
+        //public async Task Add(CommentModel model)
+        //{
+        //    var item = mapper.Map<Comment>(model);
+        //    unitOfWork.CommentRepository.Add(item);
+        //    await unitOfWork.SaveAsync();
+        //}
 
-		public void Delete(Guid id)
+        // I advise you to pay more attention to asynchronous programming,
+        // in particular, the technique of canceling multithreading using CancellationToken
+
+        public void Delete(Guid id)
 		{
-            //unitOfWork.CommentRepository.DeleteById(id);
-            //unitOfWork.SaveAsync();
             throw new NotImplementedException();
         }
 
 		public IEnumerable<CommentModel> GetAll()
 		{
-            var items = unitOfWork.CommentRepository.GetAll();
-            return mapper.Map<IEnumerable<CommentModel>>(items);
+            var items = _unitOfWork.CommentRepository.GetAll();
+            return _mapper.Map<IEnumerable<CommentModel>>(items);
         }
 
 		public IEnumerable<CommentModel> GetAllByGameId(Guid id)
 		{
-			var items = unitOfWork.CommentRepository.GetAllByGameId(id);
-            return mapper.Map<IEnumerable<CommentModel>>(items);
+			var items = _unitOfWork.CommentRepository.GetAllByGameId(id);
+            return _mapper.Map<IEnumerable<CommentModel>>(items);
         }
 
 		public CommentModel GetById(Guid id)
 		{
-            var item = unitOfWork.CommentRepository.GetById(id);
-            return mapper.Map<CommentModel>(item);
+            var item = _unitOfWork.CommentRepository.GetById(id);
+            return _mapper.Map<CommentModel>(item);
         }
 
 		public void Update(CommentModel model)
 		{
-            unitOfWork.CommentRepository.Update(mapper.Map<Comment>(model));
-            unitOfWork.SaveAsync();
+            _unitOfWork.CommentRepository.Update(_mapper.Map<Comment>(model));
+            _unitOfWork.SaveAsync();
         }
 	}
 }

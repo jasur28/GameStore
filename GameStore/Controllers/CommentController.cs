@@ -28,6 +28,7 @@ namespace GameStore.Controllers
         public IActionResult DeleteComment(Guid id)
         {
             var comment = commentService.GetById(id);
+
             return PartialView("_DeleteCommentPartialView", comment);
         }
 
@@ -35,20 +36,24 @@ namespace GameStore.Controllers
         public IActionResult DeleteComment(CommentModel item)
         {
             item.UserId = _userManager.GetUserAsync(User).Result.Id;
+
             item.IsDeleted=true;
+
             ModelState.ClearValidationState(nameof(CommentModel));
+
             if (!TryValidateModel(item, nameof(CommentModel)))
             {
                 commentService.Update(item);
+
                 return RedirectToAction("Details", "Game", new { id = item.GameId });
             }
             return View("Index", "Home");
         }
         
-
         public IActionResult EditComment(Guid id)
         {
             var comment = commentService.GetById(id);
+
             return PartialView("_EditCommentPartialView", comment);
         }
 
@@ -56,11 +61,15 @@ namespace GameStore.Controllers
         public IActionResult EditComment(CommentModel item)
         {
             item.UserId = _userManager.GetUserAsync(User).Result.Id;
+
             ModelState.ClearValidationState(nameof(CommentModel));
+
             if (!TryValidateModel(item, nameof(CommentModel)))
             {
                 commentService.Update(item);
+
                 TempData["Success"] = "The comment has been updated!";
+
                 return RedirectToAction("Details","Game", new { id = item.GameId });
             }
             return View("Index", "Home");
@@ -69,6 +78,7 @@ namespace GameStore.Controllers
         public IActionResult RestoreComment(Guid id)
         {
             var comment = commentService.GetById(id);
+
             return PartialView("_RestoreCommentPartialView", comment);
         }
 
@@ -76,13 +86,18 @@ namespace GameStore.Controllers
         public IActionResult RestoreComment(CommentModel item)
         {
             item.UserId = _userManager.GetUserAsync(User).Result.Id;
+
             item.IsDeleted = false;
+
             ModelState.ClearValidationState(nameof(CommentModel));
+
             if (!TryValidateModel(item, nameof(CommentModel)))
             {
                 commentService.Update(item);
+
                 return RedirectToAction("Details", "Game", new { id = item.GameId });
             }
+
             return View("Index", "Home");
         }
     }

@@ -1,6 +1,5 @@
 ﻿using GameStore.BLL.Interfaces;
 using GameStore.BLL.Models;
-using GameStore.BLL.Services;
 using GameStore.DAL.Entities;
 using GameStore.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +16,7 @@ namespace GameStore.Controllers
 
         public CartController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager, IGameService gameService )
+            RoleManager<IdentityRole> roleManager, IGameService gameService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -27,18 +26,7 @@ namespace GameStore.Controllers
 
         public IActionResult Index()
         {
-            var cart = HttpContext.Session.Get<List<CartModel>>("cart");
-            if (cart != null)
-            {
-                ViewBag.total = cart.Sum(s => s.Quantity * s.Game.Price);
-                ViewBag.count = cart.Count();
-            }
-            else
-            {
-                cart = new List<CartModel>();
-                ViewBag.total = 0;
-                ViewBag.count = 0;
-            }
+            var cart = GetCartFromSession();
 
             return View(cart);
         }
@@ -46,81 +34,119 @@ namespace GameStore.Controllers
         public IActionResult Buy(Guid id)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            if(userId==null)
+
+            if (userId == null)
             {
                 return RedirectToAction("Login", "Account");
             }
+
             var game = _gameService.GetById(id);
+
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
 
-            if (cart == null) 
+            if (cart == null)
             {
-                cart = new List<CartModel>();
-                cart.Add(new CartModel { Game = game, Quantity = 1 });
+                cart = new List<CartModel>
+                {
+                      new CartModel { Game = game, Quantity = 0 }
+                };
+
             }
             else
             {
                 int index = cart.FindIndex(w => w.Game.Id == id);
 
-                if (index != -1) 
+                if (index != -1)
                 {
-                    cart[index].Quantity++; 
+                    cart[index].Quantity++;
                 }
                 else
                 {
                     cart.Add(new CartModel { Game = game, Quantity = 1 });
                 }
             }
-        
+
             HttpContext.Session.Set<List<CartModel>>("cart", cart);
+
             return RedirectToAction("Index");
         }
         public IActionResult Remove(Guid id)
         {
-            //var game = _gameService.GetById(id);
+
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
 
             int index = cart.FindIndex(w => w.Game.Id == id);
+
             cart.RemoveAt(index);
+
             HttpContext.Session.Set<List<CartModel>>("cart", cart);
+
             return RedirectToAction("Index");
         }
 
         public IActionResult Add(Guid id)
         {
-            //var game = _gameService.GetById(id);
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
 
             int index = cart.FindIndex(w => w.Game.Id == id);
+
             cart[index].Quantity++;
 
             HttpContext.Session.Set<List<CartModel>>("cart", cart);
+
             return RedirectToAction("Index");
         }
 
         public IActionResult Minus(Guid id)
         {
-            //var game = _gameService.GetById(id);
+            // TODO: 1, 2, 3
+
+            // 1) if you return the List please name variables in the plural, since the slightly ambiguous "cart"
+
+            // 2) it seems not entirely logical to create a new CardModel for each game
+            // instead you could create one CardModel with Dictionary<GameModel, int> to locate here Quantity
+            // and game or even just Dictionary<Guid, int> for GameId and Quantity not to overload session memory
+
+            // 3) try to use LINQ expressions and simplify this logic 
+            // for instance:
+            // var cart = carts.FirstOrDefault(x => x.Game.Id == id);
+            // if (cart is null) return View("Index");
+            //
+            // if (cart.Quantity == 1)
+            //   cart.Remove(t);
+            // else
+            //   cart.Quantity--;
+            // but consider the second point in this case
+
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
-        
+
             int index = cart.FindIndex(w => w.Game.Id == id);
-            if (cart[index].Quantity == 1) 
+
+            if (cart[index].Quantity == 1)
             {
-                cart.RemoveAt(index); 
+                cart.RemoveAt(index);
             }
             else
             {
-                cart[index].Quantity--; 
+                cart[index].Quantity--;
             }
-        
+
             HttpContext.Session.Set<List<CartModel>>("cart", cart);
+
             return RedirectToAction("Index");
         }
 
         public IActionResult Order()
         {
-            var user = _userManager.GetUserAsync(User).Result.Id;
+            var cart = GetCartFromSession();
+
+            return View(cart);
+        }
+
+        public List<CartModel> GetCartFromSession()
+        {
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
+
             if (cart != null)
             {
                 ViewBag.total = cart.Sum(s => s.Quantity * s.Game.Price);
@@ -133,24 +159,7 @@ namespace GameStore.Controllers
                 ViewBag.count = 0;
             }
 
-            return View(cart);
+            return cart;
         }
-
-        //public IActionResult CompletedOrder()
-        //{
-        //    var cart = HttpContext.Session.Get<List<CartModel>>("cart");
-        //    if (cart != null)
-        //    {
-        //        ViewBag.total = cart.Sum(s => s.Quantity * s.Game.Price);
-        //        ViewBag.count = cart.Count();
-        //    }
-        //    else
-        //    {
-        //        cart = new List<CartModel>();
-        //        ViewBag.total = 0;
-        //        ViewBag.count = 0;
-        //    }
-        //    return PartialView("_CompleteOrderPartialView",cart);
-        //}
     }
 }

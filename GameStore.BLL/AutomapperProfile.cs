@@ -9,8 +9,6 @@ namespace GameStore.BLL
         public AutomapperProfile()
         {
             CreateMap<Game, GameModel>()
-                //.ForMember(g => g.GameGenres, r => r.MapFrom(x => x.Genres.Select(rd => rd.Id)))
-                //.ForMember(g => g.GameGenres, r => r.MapFrom(x => x.GameGenres.Select(rd => rd.).ToList()))
                 .ReverseMap();
             CreateMap<Genre, GenreModel>()
                 .ReverseMap();

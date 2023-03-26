@@ -255,12 +255,27 @@ namespace GameStore.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "fab4fac1-c546-41de-aebc-a14da6895711", "de8a28aa-3e79-414f-af3c-b2c1d076ffc2", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "fab4fac1-c546-41de-aebc-a14da6895711", "dabde615-9baf-4b7a-83c7-49b85f1d9953", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PhotoFileName", "ProfilePicture", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "217d97d9-8db6-48fa-a657-773b396a72d1", "admin@gamestore.com", false, "Admin", "Admin", false, null, "ADMIN@GAMESTORE.COM", "ADMIN", "AQAAAAEAACcQAAAAEHhCYT/q+LK+oDz1ZNUSdxscHsykU5JmhfmlpofTtu7yAk4NtYgQkOQ4kT1impKBzA==", null, false, null, null, "1b393882-4b12-435b-b5a3-838cc99faf80", false, "Admin" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "49742470-9e2e-4cdc-a207-e9064f81b10f", "admin@gamestore.com", false, "Admin", "Admin", false, null, "ADMIN@GAMESTORE.COM", "ADMIN", "AQAAAAEAACcQAAAAECvtF9LLxAu/2nOaQkyuKZqLvSskSV0GpkoXM9w4XlXzQu6PyWhkudC5VLWAEnC6mQ==", null, false, null, null, "c9de5227-ffdf-48fa-a243-4b788e98c259", false, "Admin" });
+
+            migrationBuilder.InsertData(
+                table: "Genres",
+                columns: new[] { "Id", "GenreId", "Name", "ParenId" },
+                values: new object[,]
+                {
+                    { new Guid("0894a9cf-fb1d-4283-a6cb-947084b7931f"), null, "Sports", null },
+                    { new Guid("6c10afa8-8f10-4721-850c-346d00119f42"), null, "Rpg", null },
+                    { new Guid("991771ab-46c5-4502-9072-316487e7f3ab"), null, "Strategy", null },
+                    { new Guid("db472978-2ad0-430d-92cf-e7b50a13bab8"), null, "Action", null },
+                    { new Guid("e91a6cf8-10ec-483b-aae0-ed518fa3a688"), null, "Puzzle & Skill", null },
+                    { new Guid("eb343457-3d95-4c90-ac00-bb08e521dacb"), null, "Adventure", null },
+                    { new Guid("f40c7f2d-ae99-436c-b458-09e470ca3b89"), null, "Races", null },
+                    { new Guid("f4c13eec-e88e-42c7-a0b8-eaac6c098fba"), null, "Others", null }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
