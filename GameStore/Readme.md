@@ -62,3 +62,5 @@ In this project, i have learned:
 * Explore MVC.
 * Work with Sessions
 * Automapper
+* Identity
+* Work with ViewModels
