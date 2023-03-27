@@ -20,7 +20,7 @@ Project is created with:
 * EF core 6
 * Visual Studio 2022
 * .Net Core 6
-* MSSqlserver 2019
+* MS SqlServer 2019
 
 ## Application architecture
 Architecture of this project is Three-Tier Architecture.
