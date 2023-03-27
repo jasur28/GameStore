@@ -47,12 +47,12 @@ The BLL will have a reference to the DAL. BLL manages the Input and output betwe
 It is a web apllication on asp.net mvc core 6, bootstrap, jquery, javascript, css and html
 	
 ## Setup
-1 Download source code or clone using Visual Studio. 
-2 In the appsettings.json file change to your connection string:
+1. Download source code or clone using Visual Studio. 
+2. In the appsettings.json file change to your connection string:
 "ConnectionStrings": {
     "Gamestore": "Your settings"
   }
-3 Then run application. Credentials for admin user is:
+3. Then run application. Credentials for admin user is:
 login: admin@gamestore.com
 password: Admin@295
 ## Unit Tests
