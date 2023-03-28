@@ -8,56 +8,56 @@ namespace GameStore.BLL.Services
 {
     public class GameService : ICrud<GameModel>, IGameService
     {
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IMapper mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
         
         public GameService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public void Add(GameModel model)
         {
 
-            var item = mapper.Map<Game>(model);
-            unitOfWork.GameRepository.Add(item);
-            unitOfWork.SaveAsync();
+            var item = _mapper.Map<Game>(model);
+            _unitOfWork.GameRepository.Add(item);
+            _unitOfWork.SaveAsync();
         }
 
         public void Delete(Guid id)
         {
-            unitOfWork.GameRepository.DeleteById(id);
-            unitOfWork.SaveAsync();
+            _unitOfWork.GameRepository.DeleteById(id);
+            _unitOfWork.SaveAsync();
         }
 
         public IEnumerable<GameModel> GetAll()
         {
-            var items = unitOfWork.GameRepository.GetAll();
-            return mapper.Map<IEnumerable<GameModel>>(items);
+            var items = _unitOfWork.GameRepository.GetAll();
+            return _mapper.Map<IEnumerable<GameModel>>(items);
         }
 
         public IEnumerable<GameModel> GetByFilterAsync(string filterSearch)
         {
-            var items = unitOfWork.GameRepository.GetAllWithDetails();
+            var items = _unitOfWork.GameRepository.GetAllWithDetails();
 
             var result = from search in items where search.Name.StartsWith(filterSearch)
                          select search;
 
-            return mapper.Map<IEnumerable<GameModel>>(result);
+            return _mapper.Map<IEnumerable<GameModel>>(result);
 
         }
 
         public GameModel GetById(Guid id)
         {
-            var item = unitOfWork.GameRepository.GetByIdWithDetails(id);
-            return mapper.Map<GameModel>(item);
+            var item = _unitOfWork.GameRepository.GetByIdWithDetails(id);
+            return _mapper.Map<GameModel>(item);
         }
 
         public void Update(GameModel model)
         {
-            unitOfWork.GameRepository.Update(mapper.Map<Game>(model));
-            unitOfWork.SaveAsync();
+            _unitOfWork.GameRepository.Update(_mapper.Map<Game>(model));
+            _unitOfWork.SaveAsync();
         }
     }
 }

@@ -51,7 +51,7 @@ namespace GameStore.Controllers
                     ModelState.AddModelError("", item.Description);
                 }
             }
-
+            TempData["Success"] = "The accoount has been created!";
             return RedirectToAction("Index", "Home");
         }
 

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GameStore.DAL.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class initdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -233,7 +233,8 @@ namespace GameStore.DAL.Migrations
                 columns: table => new
                 {
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GenreId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    GenreId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -255,26 +256,26 @@ namespace GameStore.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "fab4fac1-c546-41de-aebc-a14da6895711", "dabde615-9baf-4b7a-83c7-49b85f1d9953", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "fab4fac1-c546-41de-aebc-a14da6895711", "486396cb-d8d7-4b14-b61f-af8def19c834", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PhotoFileName", "ProfilePicture", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "49742470-9e2e-4cdc-a207-e9064f81b10f", "admin@gamestore.com", false, "Admin", "Admin", false, null, "ADMIN@GAMESTORE.COM", "ADMIN", "AQAAAAEAACcQAAAAECvtF9LLxAu/2nOaQkyuKZqLvSskSV0GpkoXM9w4XlXzQu6PyWhkudC5VLWAEnC6mQ==", null, false, null, null, "c9de5227-ffdf-48fa-a243-4b788e98c259", false, "Admin" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "7a8cfa11-bb33-4e7a-91cc-b430b6814fc5", "admin@gamestore.com", false, "Admin", "Admin", false, null, "ADMIN@GAMESTORE.COM", "ADMIN", "AQAAAAEAACcQAAAAEAXVMw21XOjSrAGCudS3h19iC/2SEN2IP6VMLaYaXA0h0KeLPeD5lpnj/wc4HnkYBQ==", null, false, null, null, "79b7a02e-f661-4dbe-88cb-9135f0c8d26f", false, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "Genres",
                 columns: new[] { "Id", "GenreId", "Name", "ParenId" },
                 values: new object[,]
                 {
-                    { new Guid("0894a9cf-fb1d-4283-a6cb-947084b7931f"), null, "Sports", null },
-                    { new Guid("6c10afa8-8f10-4721-850c-346d00119f42"), null, "Rpg", null },
-                    { new Guid("991771ab-46c5-4502-9072-316487e7f3ab"), null, "Strategy", null },
-                    { new Guid("db472978-2ad0-430d-92cf-e7b50a13bab8"), null, "Action", null },
-                    { new Guid("e91a6cf8-10ec-483b-aae0-ed518fa3a688"), null, "Puzzle & Skill", null },
-                    { new Guid("eb343457-3d95-4c90-ac00-bb08e521dacb"), null, "Adventure", null },
-                    { new Guid("f40c7f2d-ae99-436c-b458-09e470ca3b89"), null, "Races", null },
-                    { new Guid("f4c13eec-e88e-42c7-a0b8-eaac6c098fba"), null, "Others", null }
+                    { new Guid("21c0de74-fc7e-4cfd-8376-9b084bb0c472"), null, "Strategy", null },
+                    { new Guid("439c0cf7-2b69-437b-8ba9-09fa4de567ce"), null, "Races", null },
+                    { new Guid("881184e6-b7c8-44d2-89c1-b50d3abce720"), null, "Adventure", null },
+                    { new Guid("8dc332b4-2c11-443a-bb21-6a08b0a44f9c"), null, "Action", null },
+                    { new Guid("921fa50e-7e19-4c90-b532-eaf61456b959"), null, "Puzzle & Skill", null },
+                    { new Guid("e4d1a151-20bc-4df8-bc72-e436ec5d9099"), null, "Sports", null },
+                    { new Guid("f6e6cc12-5ff9-40df-9c50-d81871c80367"), null, "Rpg", null },
+                    { new Guid("f8e8c1be-59b7-45fd-84b5-e12cc9d9a3c6"), null, "Others", null }
                 });
 
             migrationBuilder.InsertData(

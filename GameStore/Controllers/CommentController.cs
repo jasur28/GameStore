@@ -10,24 +10,24 @@ namespace GameStore.Controllers
 {
     public class CommentController : Controller
     {
-        private readonly IGameService gameService;
-        private readonly IGenreService genreService;
-        private readonly ICommentService commentService;
+        private readonly IGameService _gameService;
+        private readonly IGenreService _genreService;
+        private readonly ICommentService _commentService;
         private readonly UserManager<ApplicationUser> _userManager;
         public CommentController(IGameService gameService,
             IGenreService genreService,
             ICommentService commentService,
             UserManager<ApplicationUser> userManager)
         {
-            this.gameService = gameService;
-            this.genreService = genreService;
-            this.commentService = commentService;
+            _gameService = gameService;
+            _genreService = genreService;
+            _commentService = commentService;
             _userManager = userManager;
         }
 
         public IActionResult DeleteComment(Guid id)
         {
-            var comment = commentService.GetById(id);
+            var comment = _commentService.GetById(id);
 
             return PartialView("_DeleteCommentPartialView", comment);
         }
@@ -43,7 +43,7 @@ namespace GameStore.Controllers
 
             if (!TryValidateModel(item, nameof(CommentModel)))
             {
-                commentService.Update(item);
+                _commentService.Update(item);
 
                 return RedirectToAction("Details", "Game", new { id = item.GameId });
             }
@@ -52,7 +52,7 @@ namespace GameStore.Controllers
         
         public IActionResult EditComment(Guid id)
         {
-            var comment = commentService.GetById(id);
+            var comment = _commentService.GetById(id);
 
             return PartialView("_EditCommentPartialView", comment);
         }
@@ -66,7 +66,7 @@ namespace GameStore.Controllers
 
             if (!TryValidateModel(item, nameof(CommentModel)))
             {
-                commentService.Update(item);
+                _commentService.Update(item);
 
                 TempData["Success"] = "The comment has been updated!";
 
@@ -77,7 +77,7 @@ namespace GameStore.Controllers
 
         public IActionResult RestoreComment(Guid id)
         {
-            var comment = commentService.GetById(id);
+            var comment = _commentService.GetById(id);
 
             return PartialView("_RestoreCommentPartialView", comment);
         }
@@ -93,7 +93,7 @@ namespace GameStore.Controllers
 
             if (!TryValidateModel(item, nameof(CommentModel)))
             {
-                commentService.Update(item);
+                _commentService.Update(item);
 
                 return RedirectToAction("Details", "Game", new { id = item.GameId });
             }

@@ -49,9 +49,7 @@
 			<nav class="main-menu">
 				<ul>
 					<li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Games</a></li>
-					<li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Community</a></li>
 					<li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-					<li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Support</a></li>
 					@if (User.IsInRole("Administrator"))
                     {
 						<li><a class="nav-link" asp-controller="Game" asp-action="Create">New Game</a></li>
@@ -65,18 +63,19 @@
 			</nav>
 		</div>
 	</header>
-	@RenderBody()
-	<!-- Footer section -->
-	<footer class="footer-section">
-		<div class="container">
-			<p class="copyright">
-				<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-				Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
-				<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-			</p>
+	@if (TempData["Success"] != null)
+	{
+		<div class="alert alert-success">
+			@TempData["Success"]
 		</div>
-	</footer>
-	<!-- Footer section end -->
+	}
+	@if (TempData["Error"] != null)
+	{
+		<div class="alert alert-danger">
+			@TempData["Error"]
+		</div>
+	}
+	@RenderBody()
 	<!--====== Javascripts & Jquery ======-->
 	<script src="~/js/jquery-3.2.1.min.js"></script>
 	<script src="~/js/bootstrap.min.js"></script>

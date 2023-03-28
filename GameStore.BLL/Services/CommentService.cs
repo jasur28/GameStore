@@ -1,14 +1,8 @@
 ﻿using AutoMapper;
 using GameStore.BLL.Interfaces;
 using GameStore.BLL.Models;
-using GameStore.DAL.Data;
 using GameStore.DAL.Entities;
 using GameStore.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameStore.BLL.Services
 {
@@ -19,8 +13,6 @@ namespace GameStore.BLL.Services
 
         public CommentService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            // TODO: and when you will use underscore for
-            // private fields there won't be need to use 'this' in this case
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }

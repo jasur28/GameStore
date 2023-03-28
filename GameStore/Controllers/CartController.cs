@@ -48,7 +48,7 @@ namespace GameStore.Controllers
             {
                 cart = new List<CartModel>
                 {
-                      new CartModel { Game = game, Quantity = 0 }
+                      new CartModel { Game = game, Quantity = 1 }
                 };
 
             }
