@@ -4,7 +4,7 @@ A simple game store web application in asp.net core 6
 
 ## Table of contents
 * [General info](#general-info)
-* [Technologies](#technologies)
+* [Tech Stack](#technologies)
 * [Application architecture](#application-architecture)
 * [Setup](#setup)
 * [Unit tests](#unit-tests)
@@ -14,12 +14,13 @@ A simple game store web application in asp.net core 6
 ## General info
 The goal of the project is to learn how to develop a commercial application.
 	
-## Technologies
+## Tech Stack
 Project is created with:
-* Windows version: 10 64bit
-* Visual Studio version: 2022
-* .Net Core version: 6
-* MSSqlserver 2019
+* ASP.Net Core 6
+* EF core 6
+* Visual Studio 2022
+* .Net Core 6
+* MS SqlServer 2019
 
 ## Application architecture
 Architecture of this project is Three-Tier Architecture.
@@ -43,16 +44,21 @@ The BLL will have a reference to the DAL. BLL manages the Input and output betwe
 * GameService.cs
 * GenreService.cs
 ### Presentation Layer
-It is a web apllication on asp.net mvc core 6.
+It is a web apllication on asp.net mvc core 6, bootstrap, jquery, javascript, css and html
 	
 ## Setup
-
+1. Download source code or clone using Visual Studio. 
+2. In the appsettings.json file change to your connection string:
+"ConnectionStrings": {
+    "Gamestore": "Your settings"
+  }
+3. Then run application. Credentials for admin user is:
+login: admin@gamestore.com
+password: Admin@295
 ## Unit Tests
 
 ## Not implemented
 * Unit Tests
-* Setup
-
 
 ## Conclusion
 In this project, i have learned:
