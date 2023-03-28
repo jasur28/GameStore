@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Text;
 using System;
+using System.Data.Common;
 
 namespace GameStore.Controllers
 {
@@ -16,15 +17,18 @@ namespace GameStore.Controllers
         private readonly IGameService _gameService;
         private readonly IGenreService _genreService;
         private readonly ICommentService _commentService;
+        private readonly IGameGenreService _gameGenreService;
         private readonly UserManager<ApplicationUser> _userManager;
         public GameController(IGameService gameService,
             IGenreService genreService,
             ICommentService commentService,
+            IGameGenreService gameGenreService,
             UserManager<ApplicationUser> userManager)
         {
             _gameService = gameService;
             _genreService = genreService;
             _commentService = commentService;
+            _gameGenreService = gameGenreService;
             _userManager = userManager;
         }
 
@@ -60,6 +64,7 @@ namespace GameStore.Controllers
             {
                 gameGenreModel.Add(new GameGenreModel
                 {
+                    Id = Guid.NewGuid(),
                     GameId = item.Id,
                     GenreId = new Guid(id)
                 });
@@ -206,21 +211,37 @@ namespace GameStore.Controllers
             GameViewModel genres = new GameViewModel(_genreService);
             ViewBag.Genres = genres.genreList;
 
+
+            //Remove Genres related to the Game
+            var gameGenresList = _gameGenreService.GetAll().Where(x => x.GameId == item.Id);
+
+            foreach (var gameGenre in gameGenresList)
+            {
+                _gameGenreService.Delete(gameGenre.GameId, gameGenre.GenreId);
+            }
+
+
+            //Assign Genres to the Game
             string[] gameGenres = Request.Form["listGenres"].ToString().Split(",");
 
             List<GameGenreModel> gameGenreModel = new List<GameGenreModel>();
 
             foreach (string id in gameGenres)
             {
-                gameGenreModel.Add(new GameGenreModel
+                var temp = new GameGenreModel
                 {
+                    Id = Guid.NewGuid(),
                     GameId = item.Id,
                     GenreId = new Guid(id)
-                });
+                };
+                gameGenreModel.Add(temp);
+                _gameGenreService.Add(temp);
             }
-
-            item.GameGenres = gameGenreModel;
             
+            
+            
+
+            //Check model and save in the Database
             ModelState.ClearValidationState(nameof(GameModel));
 
             if (!TryValidateModel(item, nameof(GameModel)))

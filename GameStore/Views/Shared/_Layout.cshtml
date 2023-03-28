@@ -49,9 +49,7 @@
 			<nav class="main-menu">
 				<ul>
 					<li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Games</a></li>
-					<li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Community</a></li>
 					<li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-					<li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Support</a></li>
 					@if (User.IsInRole("Administrator"))
                     {
 						<li><a class="nav-link" asp-controller="Game" asp-action="Create">New Game</a></li>
@@ -65,6 +63,18 @@
 			</nav>
 		</div>
 	</header>
+	@if (TempData["Success"] != null)
+	{
+		<div class="alert alert-success">
+			@TempData["Success"]
+		</div>
+	}
+	@if (TempData["Error"] != null)
+	{
+		<div class="alert alert-danger">
+			@TempData["Error"]
+		</div>
+	}
 	@RenderBody()
 	<!--====== Javascripts & Jquery ======-->
 	<script src="~/js/jquery-3.2.1.min.js"></script>

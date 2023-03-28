@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GameStore.DAL.Entities
+﻿namespace GameStore.DAL.Entities
 {
-	public class GameGenre
+	public class GameGenre : BaseEntity
 	{
 		public Guid GameId { get; set; }
         public Guid GenreId { get; set; }

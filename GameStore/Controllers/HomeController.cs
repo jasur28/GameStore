@@ -8,28 +8,29 @@ namespace GameStore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IGameService gameService;
+        private readonly IGameService _gameService;
         
         public HomeController(IGameService gameService)
         {
-            this.gameService = gameService;
+            _gameService = gameService;
         }
 
         [HttpGet]
-        public IActionResult Index(string searchString)//, list
+        public IActionResult Index(string searchString)
         {
             var cart = HttpContext.Session.Get<List<CartModel>>("cart");
+
             if(cart!=null)
             {
                 ViewBag.count=cart.Count;
             }
             if (string.IsNullOrEmpty(searchString))
             {
-                return View(gameService.GetAll());
+                return View(_gameService.GetAll());
             }
             else
             {
-                return View(gameService.GetByFilterAsync(searchString));
+                return View(_gameService.GetByFilterAsync(searchString));
             }
             
         }  

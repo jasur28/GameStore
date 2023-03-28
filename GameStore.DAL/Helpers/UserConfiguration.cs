@@ -2,11 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameStore.DAL.Helpers
 {
@@ -26,7 +21,7 @@ namespace GameStore.DAL.Helpers
             };
 
             PasswordHasher<ApplicationUser> passwordHasher = new PasswordHasher<ApplicationUser>();
-            user.PasswordHash = passwordHasher.HashPassword(user, "Jasur@295");
+            user.PasswordHash = passwordHasher.HashPassword(user, "Admin@295");
 
             builder.HasData(user);
         }
