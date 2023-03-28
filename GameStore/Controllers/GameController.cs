@@ -207,11 +207,6 @@ namespace GameStore.Controllers
                 item.PhotoFileName = fileStream.Name;
             }
 
-            //Select Genres
-            GameViewModel genres = new GameViewModel(_genreService);
-            ViewBag.Genres = genres.genreList;
-
-
             //Remove Genres related to the Game
             var gameGenresList = _gameGenreService.GetAll().Where(x => x.GameId == item.Id);
 
@@ -224,8 +219,6 @@ namespace GameStore.Controllers
             //Assign Genres to the Game
             string[] gameGenres = Request.Form["listGenres"].ToString().Split(",");
 
-            List<GameGenreModel> gameGenreModel = new List<GameGenreModel>();
-
             foreach (string id in gameGenres)
             {
                 var temp = new GameGenreModel
@@ -234,12 +227,8 @@ namespace GameStore.Controllers
                     GameId = item.Id,
                     GenreId = new Guid(id)
                 };
-                gameGenreModel.Add(temp);
                 _gameGenreService.Add(temp);
             }
-            
-            
-            
 
             //Check model and save in the Database
             ModelState.ClearValidationState(nameof(GameModel));
